@@ -85,14 +85,14 @@
     map.setView(L.latLng(46.5197, 6.6323), 13);
 
     var options = {
-    maxZoom: 18,
-    tolerance: 3,
-    debug: 0,
-    style: {
-        fillColor: "#1EB300",
-        color: "#F2FF00",
-    },
-};
+        maxZoom: 18,
+        tolerance: 3,
+        debug: 0,
+        style: {
+            fillColor: "#1EB300",
+            color: "#F2FF00",
+        },
+    };
 
 function getValue(o, findKey) {
   const output = []
@@ -105,25 +105,26 @@ function getValue(o, findKey) {
   }
   
   return output;
-}
+};
+// var selval = getValue(data.features, 'sum_unobs_Gew1');
+// const  mind = selval.join(", ").sort()[0];
+// const  maxd = selval.join(", ").sort().reverse()[0];
 
-const  mind = getValue(data.features, 'sum_unobs_Gew1').sort()[0];
-const  maxd = getValue(data.features, 'sum_unobs_Gew1').sort().reverse()[0];
+var sel_val = getValue(data.features, 'sum_unobs_Gew1').join(", ");
+// console.log(sel_val);
 
-var sel_val = getValue(data.features, 'sum_unobs_Gew1')
+var min_d = Math.min(...getValue(data.features, 'sum_unobs_Gew1'))
+var max_d = Math.max(...getValue(data.features, 'sum_unobs_Gew1'))
+console.log(min_d,max_d);
 
-console.log("Step 4 - After mapping:", mind,maxd);
-console.log(getValue(data.features, 'sum_unobs_Gew1'));
-
-var colors = chroma.scale(['white', 'blue','green']).domain(sel_val, 10).mode('lch');
+var colors = chroma.scale(['white', 'blue','green']).domain([min_d,max_d]).mode('lch').colors(5);
 // var colors = chroma.scale('RdYlBu').domain(sel_val, 7, 'quantiles');
-
 console.log(colors[0]);
 
 function checkScore(x){
     return x >= 10;
 };
-// var viewscore = data.feature.properties.sum_unobs_Gew1;
+
 var options = {
     maxZoom: 18,
     tolerance: 3,
@@ -131,21 +132,23 @@ var options = {
     // style: {fillColor: 'blue'}
     style: (properties) => {
        return {
+        // "opacity" : .4,
         "fillColor"  : colors[properties.sum_unobs_Gew1]
        }
     }  
 };
-var vtLayer = L.geoJson.vt(data, options).addTo(map);
+var vtLayer = L.geoJson.vt(data, options);
+vtLayer.addTo(map);
 
 var slider = document.getElementById('slider');
 
 noUiSlider.create(slider, {
-    start: [mind, maxd],
+    start: [min_d, max_d],
     connect: true,
     tooltips : true,
     range: {
-        'min': mind,
-        'max': maxd
+        'min': min_d,
+        'max': max_d
     }
 }).on('slide', function(e){
     console.log(e)
