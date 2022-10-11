@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Visual Capital of Switzerland</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.1/dist/leaflet.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
+    <!--[if lte IE 8]><link rel="stylesheet" href="https://cdn.leafletjs.com/leaflet-0.7.2/leaflet.ie.css" /><![endif]-->
+
+    <link rel="stylesheet" href="css/leaflet-sidebar.css" />
+
+    <style>
+        body {
+            padding: 0;
+            margin: 0;
+        }
+
+        html, body, #map {
+            height: 100%;
+            font: 10pt "Helvetica Neue", Arial, Helvetica, sans-serif;
+        }
+
+        .lorem {
+            font-style: italic;
+            color: #AAA;
+        }
+    </style>
+</head>
+<body>
+    <div id="sidebar" class="sidebar collapsed">
+        <!-- Nav tabs -->
+        <div class="sidebar-tabs">
+            <ul role="tablist">
+                <li><a href="#explore" role="tab"><i class="fa fa-bars"></i></a></li>
+                <li><a href="#profile" role="tab"><i class="fa fa-user"></i></a></li>
+                <li class="disabled"><a href="#messages" role="tab"><i class="fa fa-envelope"></i></a></li>
+                <li><a href="https://github.com/AdamSwietek/visualcapital" role="tab" target="_blank"><i class="fa fa-github"></i></a></li>
+            </ul>
+
+            <ul role="tablist">
+                <li><a href="#settings" role="tab"><i class="fa fa-gear"></i></a></li>
+            </ul>
+        </div>
+
+        <!-- Tab panes -->
+        <div class="sidebar-content">
+            <div class="sidebar-pane" id="explore">
+                <h1 class="sidebar-header">
+                    Visual Capital of Switzerland
+                    <span class="sidebar-close"><i class="fa fa-caret-left"></i></span>
+                </h1>
+                <br> </br>
+                <p> EXPLORE THE VISUAL CAPITAL OF SWITZERLAND </p>
+                
+                <label for="grp-select">Choose Grouping to Explore:</label>
+                <div id = "grp-select" class="btn-group" role="group" aria-label="Basic radio toggle button group">
+                    <input type="radio" class="btn-check" name="grp_radio" id="grp-btnradio1" autocomplete="off" value="hexbins" onClick = "updateMap()" checked >
+                    <label class="btn btn-outline-primary" for="grp-btnradio1">1km Hexbins</label>
+                
+                    <input type="radio" class="btn-check" name="grp_radio" id="grp-btnradio2" autocomplete="off" value="communes" onClick = "updateMap()">
+                    <label class="btn btn-outline-primary" for="grp-btnradio2">Communes</label>
+
+                    <input type="radio" class="btn-check" name="grp_radio" id="grp-btnradio3" autocomplete="off" value="agglo coming soon">
+                    <label class="btn btn-outline-primary" for="grp-btnradio3">Agglomerations</label>
+                    </div>
+                <div id="grplog"> </div>
+                <p></p>
+                <label for="metric-select">Choose Metric to Explore:</label>
+                <div id = "metric-select" class="btn-group" role="group" aria-label="Basic radio toggle button group">
+                    <div> 
+                        <input type="radio" class="btn-check" name="metric_radio" id="metric-btnradio1" autocomplete="off" value="prob" checked >
+                        <label class="btn btn-outline-primary" for="metric-btnradio1">prob</label>
+                    
+                        <input type="radio" class="btn-check" name="metric_radio" id="metric-btnradio2" autocomplete="off" value="net_income_ptp">
+                        <label class="btn btn-outline-primary" for="metric-btnradio2">net_income_ptp</label>
+
+                        <input type="radio" class="btn-check" name="metric_radio" id="metric-btnradio3" autocomplete="off" value="bldg_count">
+                        <label class="btn btn-outline-primary" for="metric-btnradio3">bldg_count</label>
+
+                        <input type="radio" class="btn-check" name="metric_radio" id="metric-btnradio4" autocomplete="off" value="slope_median">
+                        <label class="btn btn-outline-primary" for="metric-btnradio4">slope_median</label>
+                    </div>
+                </div>
+                <div id="metriclog"> </div>
+                <p></p>
+                <label for="agglo-select">Zoom to:</label>
+                <div id = "agglo-select" class="btn-group" role="group" aria-label="Basic radio toggle button group">
+                    <div>
+                        <input type="radio" class="btn-check" name="agglo" id="agglo-btnradio1" autocomplete="off" value="Lausanne" onClick="Action()" checked >
+                        <label class="btn btn-outline-primary" for="agglo-btnradio1">Lausanne</label>
+                    
+                        <input type="radio" class="btn-check" name="agglo" id="agglo-btnradio2" autocomplete="off" value="Zurich"  onClick="Action1()">
+                        <label class="btn btn-outline-primary" for="agglo-btnradio2">Zurich</label>
+    
+                        <input type="radio" class="btn-check" name="agglo" id="agglo-btnradio3" autocomplete="off" value="Geneva" onClick="Action2()" >
+                        <label class="btn btn-outline-primary" for="agglo-btnradio3">Geneva</label>
+                    
+                        <input type="radio" class="btn-check" name="agglo" id="agglo-btnradio4" autocomplete="off" value="Zug"  onClick="Action3()">
+                        <label class="btn btn-outline-primary" for="agglo-btnradio4">Zug</label>
+                    </div>
+                    
+                    </div>
+                <div id="metriclog"> </div>
+
+                </div>
+                <!-- <div id="groupbylog"> </div>
+                <label for="metric-select">Choose Metric to Explore:</label>
+                <div id="metric-select" class="btn-group" role="group" aria-label="Basic radio toggle button group">
+                    <input type="radio" name="color_var_radio" value="prob" id="btnradio1" checked>
+                    <label class="btn btn-outline-primary" for="btnradio1">prob</label>
+                    <input type="radio" name="color_var_radio" value="net_income_ptp" />net_income_ptp
+                    <input type="radio" name="color_var_radio" value="bldg_count" />bldg_count
+                </div>
+                <div id="metriclog"> Selected: </div> -->
+
+
+                <!-- <p class="lorem">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
+
+                <p class="lorem">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
+
+                <p class="lorem">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p> -->
+
+                <p class="lorem">Visual landscape quality influences a range of personal factors including judgement, health, and attention, and has been identified as an important economic determinant of both real estate valuation and residential income sorting. Yet, assessing the building-level visual landscape quality has remained challenging primarily due to the difficulty of parameterizing the view itself and the lack of large-scale view-data. Here, we use data from 33-million viewpoints derived from Wuest-Partner’s digital twin of Switzerland’s building stock to study the supply of visual landscape quality. Specifically, we define important 3D-building viewpoint metrics (1) visual composition and (2) visual configuration metrics – including visual sentiment, richness, balance, panorama, refuge – to summarize the visual arrangement of a given view and the spatial disparity of a region’s set of window views. To prove wider applicability, we construct a model to learn the visual context of high-income regions, and, by applying the model to Switzerland’s entire building stock, we present a quantitative building-level assessment of visual landscape and define regions with high visual quality independent of their income level. We release our new measure of visual capital to enable downstream studies focused on correlates to visual landscape quality- whether financial, social, environmental or physiological-, and promote future interdisciplinary studies.</p>
+            </div>
+
+            <div class="sidebar-pane" id="profile">
+                <h1 class="sidebar-header">Profile<span class="sidebar-close"><i class="fa fa-caret-left"></i></span></h1>
+            </div>
+
+            <div class="sidebar-pane" id="messages">
+                <h1 class="sidebar-header">Messages<span class="sidebar-close"><i class="fa fa-caret-left"></i></span></h1>
+            </div>
+
+            <div class="sidebar-pane" id="settings">
+                <h1 class="sidebar-header">Settings<span class="sidebar-close"><i class="fa fa-caret-left"></i></span></h1>
+            </div>
+        </div>
+    </div>
+
+    <div id="map" ></div>
+
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script src="js/leaflet-sidebar.js"></script>
+    <script src="https://unpkg.com/leaflet.vectorgrid@1.3.0/dist/Leaflet.VectorGrid.bundled.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/chroma-js/2.4.2/chroma.min.js"></script>
+
+    <script>
+        //Print radio selctions
+        $("#grp-select").click(function() { 
+            var grp_var= $('input[name="grp_radio"]:checked').val();
+            // grplog.innerHTML = grp_var;
+            
+            if (grp_var == 'communes'){
+                grplog.innerHTML = mapUrl_com;
+            } else {
+                grplog.innerHTML = mapUrl_hex;
+            }
+            
+        });
+        $("#metric-select").click(function() { 
+            var metric_val= $('input[name="metric_radio"]:checked').val();
+            metriclog.innerHTML = 'Zoom map to refresh: ' + metric_val;
+            updateMap()
+
+        });
+
+        //Zoom to func actions
+        function Action(){
+        map.panTo([46.5197,6.6323], 12);
+        //   updateMap();
+        }
+        function Action1(){
+        map.panTo([47.3769,8.5417], 12);
+    //   updateMap();
+        }
+        function Action2(){
+        map.panTo([46.2044,6.1432], 12);
+    //   updateMap();
+        }
+        function Action3(){
+        map.panTo([47.1662,8.5155], 12);
+    //   updateMap();
+        }
+
+        // create map
+        var map = L.map('map', {
+            center: [46.4414,6.5295],
+            minZoom: 9,
+            maxZoom: 15,
+            zoomControl: true,
+            zoom: 10,
+        });
+        
+        // add background basemap
+        var mapBaseLayer = L.tileLayer(
+            'https://{s}.basemaps.cartocdn.com/rastertiles/light_all/{z}/{x}/{y}.png', {
+                attribution: '(C) OpenStreetMap contributors (C) CARTO'
+            }
+        ).addTo(map);
+
+        // add leaflet sidebar
+        var sidebar = L.control.sidebar('sidebar').addTo(map);
+    
+
+
+
+        // func to create colormap
+        function getcmap(sel_var) { 
+            if (sel_var == 'prob'){
+                cmap = chroma.scale('YlGnBu').classes([ 0,13.,  34.,  58.,  83., 100.]); 
+            } else if (sel_var == 'bldg_count'){
+                cmap = chroma.scale('Greys').classes([0, 101.,  292.,  560.,  944., 2233.]); 
+            } else if (sel_var == 'net_income_ptp'){
+                cmap = chroma.scale('OrRd').classes([ 0,71.,  97., 160., 480., 965.]); 
+            } else if (sel_var == 'slope_median'){
+                cmap = chroma.scale('BrBG').classes([ 0., 2,  6., 10, 13., 17, 21.]); 
+            } 
+            return cmap
+        };
+        // define style and colors of  vectortile style
+        var vectorTileStyling = {
+            test_suisse_commune2_4326: function(properties, zoom) {
+
+                var color_var = new $('input[name="metric_radio"]:checked').val();
+                var cmap = getcmap(color_var);
+
+                var opacity = 1;
+                var weight = 0;
+                if (zoom > 12) {
+                    weight = 1.0;
+                    opacity = .5;
+                }
+                return ({
+                    fill: true,
+                    fillColor: cmap(properties[color_var]),
+                    fillOpacity: opacity,
+                    weight: weight,
+                    color: "#ffffff",
+                    opacity: 1.0,
+                });
+                },
+            test_suisse_hexbin_4326: function(properties, zoom) {
+
+                var color_var = new $('input[name="metric_radio"]:checked').val();
+                var cmap = getcmap(color_var);
+
+                var opacity = 1;
+                var weight = 0;
+                if (zoom > 12) {
+                    weight = 1.0;
+                    opacity = .5;
+                }
+                return ({
+                    fill: true,
+                    fillColor: cmap(properties[color_var]),
+                    fillOpacity: opacity,
+                    weight: weight,
+                    color: "#ffffff",
+                    opacity: 1.0,
+                });
+            }
+        }
+
+        // define options of vector tiles
+        var mapVectorTileOptions = {
+            rendererFactory: L.canvas.tile,
+            interactive: true,
+            attribution: '(C) A.R. Swietek',
+            maxNativeZoom: 15,
+            minZoom: 6,
+            vectorTileLayerStyles: vectorTileStyling,
+        };
+
+
+    
+        // get vector tiles URL
+        // var grp_var = $('input[name="grp_radio"]:checked').val();
+        var mapUrl = {
+            "hexbins": "tiles_suisse/{z}/{x}/{y}.pbf",
+            "communes": "tiles_suisse_commune/{z}/{x}/{y}.pbf",
+        };
+ 
+        // // create VectorGrid layer
+        var mapPbfLayer = new L.VectorGrid.Protobuf(mapUrl['hexbins'], mapVectorTileOptions)
+
+        // var mapPbfLayer_com = new L.VectorGrid.Protobuf(mapUrl['communes'], mapVectorTileOptions)
+        mapPbfLayer.addTo(map);
+    
+        function updateMap(){  
+            var grp_var = $('input[name="grp_radio"]:checked').val();
+            // console.log(mapUrl[grp_var])
+            var layersToRemove = [];
+            var mapPbfLayer = new L.VectorGrid.Protobuf(mapUrl[grp_var], mapVectorTileOptions);
+            map.eachLayer(function(layer){
+                console.log(layer)
+                layersToRemove = layer})
+            // console.log('this  ' + layersToRemove._url)
+            map.removeLayer(layersToRemove)
+            return mapPbfLayer.addTo(map)
+        }
+    </script>
+</body>
+</html>
