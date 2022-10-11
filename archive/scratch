@@ -1,0 +1,211 @@
+from decimal import Overflow
+from pydoc import classname
+from turtle import position
+import dash
+import dash_bootstrap_components as dbc
+from dash import Input, Output, dcc, html
+import dash
+import dash_leaflet as dl
+import dash_leaflet.express as dlx
+
+import numpy as np
+
+sel_cols =['Lake','Nature','Sky','Road','HPRoad','Vegitation','Industrial','Sewage','Airport','Agriculture']
+def getBTNS(sel_cols):
+    return [dbc.Button(var, outline = True, color = 'primary',size="sm") for i, var in enumerate(sel_cols)]
+# the style arguments for the sidebar. We use position:fixed and a fixed width
+
+app = dash.Dash(external_stylesheets=[dbc.themes.FLATLY])
+
+SIDEBAR_STYLE = {
+    "position": "fixed",
+    "top": 0,#'7rem',
+    "left": 0,
+    "bottom": 0,
+    "width": "25rem",
+    "padding": "2rem 1rem",
+    "background-color": "#white",
+}
+
+# the styles for the main content position it to the right of the sidebar and
+# add some padding.
+navbar_section = dbc.Navbar
+groupby_section = html.Div(
+    children= [
+        html.Label("group",style=dict(width = '50%')),
+        html.Div(
+            children= [
+                dcc.RadioItems(
+                    id='grp-type', 
+                    options=['communes','hexbins'],
+                    value="hexbins",
+                    # inline=True,
+                    )], style=dict(display='flex', padding = '0rem 2rem')
+                )]#, style=dict(display='flex', padding = '.5rem 1rem')
+                )
+
+income_section = html.Div(
+    children = [
+        html.Label('Visual Capital',style=dict(width = '10%', size = 8)),
+        html.Div(
+            children = getBTNS(['smoothed','norm_diff']), 
+            id = 'income-btn-grp', 
+            style = dict(display = 'flex-start', padding = '0rem 2rem', width = '100%' )
+            )])#, style=dict(display='flex', padding = '.5rem 1rem'))
+vcomp_section = html.Div(
+    children= [
+        html.Label('Visual Composition',style=dict(width = '50%')),
+        html.Div(
+            children = getBTNS(sel_cols), 
+            id = 'vcomp-btn-grp', 
+            style = dict(display = 'flex', padding = '0rem 2rem', width = '100%', overflow = 'scroll' )
+            )])#, style=dict(display='flex', padding = '.5rem 1rem'))
+vconfig_section = html.Div(
+    children= [
+        html.Label('Visual Configuration',style=dict(width = '50%')),
+        html.Div(
+            children = getBTNS(sel_cols), 
+            id = 'vconfig-btn-grp', 
+            style = dict(display = 'flex', padding = '0rem 2rem', overflow = 'scroll' )
+            )])#, style=dict(display='flex', padding = '.5rem 1rem'))
+range_slider = dcc.RangeSlider(
+    1, 100,
+    id='linear-range-slider',
+    marks= None,
+    value=[5, 100],
+    dots=False,
+    step=1,
+    tooltip={"placement": "bottom", "always_visible": True},
+    updatemode='drag'
+)
+
+sidebar = html.Div(
+    [ 
+        html.H6("Visual Capital", className="display-6"),
+        # html.H4("What the Swiss See", className="display-3"),
+        html.Hr(),
+        groupby_section,
+        income_section, vcomp_section, vconfig_section,
+        html.Hr(),
+        range_slider,
+        # html.Div(
+        #     children= [
+        #         html.Label("group",style=dict(width = '10%')),
+        #         html.Div([
+        #             dcc.RadioItems(
+        #                 id='grp-type', 
+        #                 options=['communes','hexbins'],
+        #                 value="hexbins",
+        #                 inline=True,
+        #                 )], style=dict(display='flex', padding = '0rem 2rem')
+        #                 )], style=dict(display='flex', padding = '.5rem 1rem')),
+        # html.Div([
+        #     html.Label('view',style=dict(width = '10%')),
+
+        #     html.Div(
+        #         children = getBTNS(['smoothed','norm_diff']), 
+        #         id = 'econ-indicaton-btn-grp', 
+        #         style = dict(display = 'flex-start', padding = '0rem 2rem' )
+        #         )], style=dict(display='flex', padding = '.5rem 1rem')),
+        
+        # html.P('Advanced: Select Range', className = 'display-10'),
+
+        # html.Div(
+        #     children = [
+        #         html.Label('type',style=dict(width = '10%')),
+        #         html.Div([
+        #             dcc.RadioItems(
+        #                 id='view-type', 
+        #                 options=['composition','configuration'],
+        #                 value="composition",
+        #                 inline=True,
+        #                 )], style=dict(display='flex', padding = '0rem 2rem' )
+        #                 )], style=dict(display='flex', padding = '.5rem 1rem')),
+        # html.Div([
+        #     html.Label('indicator',style=dict(width = '10%')),
+
+        #     html.Div(
+        #         children = getBTNS(sel_cols), 
+        #         id = 'view-indicaton-btn-grp', 
+        #         style = dict(display = 'flex-start', padding = '0rem 2rem' )
+        #         )], style=dict(display='flex', padding = '.5rem 1rem')),
+
+        # html.P('Advanced: Select Range', className = 'display-10'),
+        # dcc.RangeSlider(
+        #     0, 100,
+        #     id='non-linear-range-slider',
+        #     marks= None,
+        #     value=[5, 100],
+        #     dots=False,
+        #     step=1,
+        #     tooltip={"placement": "bottom", "always_visible": True},
+        #     updatemode='drag'
+        # ),
+
+        # dcc.Graph(
+        #     id = 'sidebar-fig'
+        # )
+    ],
+    style=SIDEBAR_STYLE,
+)
+url = 'http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png'
+map_ = dl.Map(
+                id = 'map',
+                children = dl.TileLayer(url = url),
+                style = {
+                    # 'position':'fixed',
+                    'height':'100vh', 
+                #     # 'width':'100%',
+                    "margin-left": "27rem",
+                #     # "margin-right": "10rem",
+                    "padding": "2rem 2rem"
+                },
+                center=(46.5197,6.6323), 
+                zoom = 9
+                )
+# MAP_STYLE = {
+#     'height','100vh',
+#     # 'width':'100%',
+#     "margin-left": "18rem",
+#     "margin-right": "1rem",
+#     "padding": "2rem 1rem",
+# }
+# content = html.Div(id="page-content", children = map_, style=CONTENT_STYLE)
+
+navbar = html.Div(
+    className='row',
+    children = [
+        html.H4('What the Swiss See', style = {'height':'1rem'}),
+        # html.Hr(style={
+        #         # 'borderWidth': "0.3vh", 
+        #         "width": "100%", 
+        #         "backgroundColor": "#939799","opacity":".5"}),
+        dcc.RadioItems(
+            id='candidate', 
+            options=['test1','test2','test3','test4','test5','test6'],
+            value="test1",
+            inline=True,
+            style = {
+                'height':'1rem',
+                "background-color": "#white"}
+        )
+    ])
+
+
+# app = dash.Dash()
+app.layout = html.Div(children=[#navbar,
+                      html.Div(className='row',  # Define the row element
+                               children=[sidebar, map_]),
+                                #   html.Div(sidebar, className='four columns div-user-controls'),  # Define the left element
+                                #   html.Div(map_, className='eight columns div-for-charts bg-grey')  # Define the right element
+                                #   ])
+                                ])
+
+
+
+
+if __name__ == '__main__':
+    app.run_server(debug = True, use_reloader = True)
+    
+    
+ 

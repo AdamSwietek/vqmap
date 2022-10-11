@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang = 'eng'>
+   
+<head>
+    <meta charset="UTF-8">
+    <meta name = 'viewport' content = "width=device-width, initial-scale = 1.0">
+    <title> What the Swiss See</title>
+
+    <!-- leaflet css-->
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css" integrity="sha512-hoalWLoI8r4UszCkZ5kL8vayOGVae1oxXe/2A4AO6J9+580uKHDO3JdHb7NzwwzK5xr/Fs0W40kiNHxM9vyTtQ==" crossorigin="" />    
+    <link re="stylesheet" href = "pluggins\nouislider.css"/>
+    <link href="pluggins\nouislider.css" rel="stylesheet">
+
+
+    <!-- Add leaflet ajax for loading geojson -->
+    <!-- <script src="leaflet.ajax.min.js"></script> -->
+
+    <style>
+
+        body{
+            margin: 0;
+            padding:0;
+        }
+        #map{
+            width: 100%;
+            height: 100vh;
+            /* margin-top : 10vh; */
+            }
+        #overlay {
+            position:absolute;
+            z-index: 1000;
+            background: rgba(255,255,255,0.7);
+            padding: 10px;
+            right:0;
+            margin:10px;
+            border-radius: 10px;
+
+            bottom: 1;
+            left: 60%;
+            height: 20%;
+            
+            
+
+        }
+        #slider-fit {
+            padding: 0 16px;
+        }
+
+
+        #slider {
+            margin-top : 20px;
+            margin-left : 20px;
+            margin-right : 20px;
+
+        }
+    </style>
+</head>
+
+<body>
+    <div id = "overlay" >
+        <h2>Viewseek</h2>
+        <label for="pet-select">Choose a pet:</label>
+        <select name="pets" id="pet-select"  onchange="onSelectedProperty();" onfocus="this.selectedProperty = -1;" > 
+            <option value="sum_unobs_Gew1" >Lake</option>
+            <option selected="selected" value="sum_unobs_Nat3" >Nature</option>
+            <option value="sum_unobs_Abb7">Industry</option>
+        </select>
+        <!-- <input type="text" id= "current_center"/>
+        <button id = "toggleLayer">Toggle</button> -->
+        <br />
+        <div id = "slider"></div>
+    </div>
+    <div id = 'map'></div>
+</body>
+</html>
+
+<!-- leaflet js-->
+<script src = "https://unpkg.com/leaflet@1.8.0/dist/leaflet.js" integrity="sha512-BB3hKbKWOc9Ez/TAwyWxNXeoV9c1v6FIeYiBieIWkpLjauysF18NzgR1MBNBXf8/KABdlkX68nAhlwcDFLGPCQ==" crossorigin=""></script>
+<script src = "https://unpkg.com/geojson-vt@3.2.0/geojson-vt.js"></script>
+<script src = "pluggins\leaflet-geojson-vt.js"></script>
+
+<script src = "geodata\res_lau_simpl_4326.js"></script>
+
+<script src = "pluggins\nouislider.js"></script>
+<script src = "https://cdnjs.cloudflare.com/ajax/libs/chroma-js/2.1.0/chroma.min.js"></script>
+<script>
+var map = new L.Map('map', {
+    crs: L.CRS.EPSG3857,
+    continuousWorld: true,
+    worldCopyJump: false
+    });
+    var url = 'https://wmts20.geo.admin.ch/1.0.0/ch.swisstopo.pixelkarte-farbe/default/current/3857/{z}/{x}/{y}.jpeg';
+    var tilelayer = new L.tileLayer(url);
+    map.addLayer(tilelayer);
+    map.setView(L.latLng(46.5197, 6.6323), 13);
+
+function getValue(o, findKey) {
+  const output = []
+  
+  for (const k in o) {
+    if (k === findKey)
+      output.push(o[k])
+    else if (typeof o[k] === 'object')
+      output.push(...getValue(o[k], findKey))
+  }
+  
+  return output;
+};
+// var selval = getValue(data.features, 'sum_unobs_Gew1');
+// const  mind = selval.join(", ").sort()[0];
+// const  maxd = selval.join(", ").sort().reverse()[0];
+
+var sel_val = getValue(data.features, 'sum_unobs_Gew1').join(", ");
+// console.log(sel_val);
+
+const min_d = Math.min(...getValue(data.features, 'sum_unobs_Gew1'))
+const max_d = Math.max(...getValue(data.features, 'sum_unobs_Gew1'))
+console.log(min_d,max_d);
+
+var colors = chroma.scale(['white', 'blue', 'red']).domain([.5,1,10]).mode('lch').colors(Math.round(max_d));
+// var colors = chroma.scale(['blue','green']).domain(sel_val, 7, 'quantiles').mode('lch').colors(Math.round(max_d));
+
+// var colors = chroma.scale('RdYlBu').domain(sel_val, 7, 'quantiles');
+// console.log(document.getElementById("pet-select").value);
+
+function checkScore(x){
+    return x >= 10;
+};
+
+var selectedProperty = "";
+
+function onSelectedProperty(value) {
+    selectedProperty = document.getElementById("pet-select").value
+    var vtLayer = L.geoJson.vt(data, options).addTo(map);
+};
+
+var slider = document.getElementById('slider');
+
+var options = {
+    maxZoom: 18,
+    tolerance: 3,
+    debug: 0,
+    // style: {fillColor: 'blue'}
+    style: (properties) => {
+       return {
+        "opacity" : 1,
+        "color"  : colors[Math.round(properties[selectedProperty])],
+        "fillColor": "#ff0000",
+       }
+    }  
+};
+
+const clone = structuredClone(data);
+var vtLayer = L.geoJson.vt(clone, options).addTo(map);
+
+
+noUiSlider.create(slider, {
+    start: [min_d, max_d],
+    step: .1,
+    connect: true,
+    tooltips : true,
+    range: {
+        'min': min_d,
+        'max': max_d
+    }
+}).on('change', function(e){
+    var sliderValue = slider.noUiSlider.get();
+    
+    var options = {
+        maxZoom: 18,
+        tolerance: 3,
+        debug: 0,
+        // style: {fillColor: 'blue'}
+        style: (properties) => {
+            if ((feature.properties.sum_unobs_Gew1 >= parseFloat(e[0])) && (feature.properties.sum_unobs_Gew1 <= parseFloat(e[1]))) {
+                    return {
+                        "opacity" : 1,
+                        "color"  : colors[Math.round(properties[selectedProperty])],
+                        "fillColor": "#ff0000",
+                    }
+                }  else {
+                    return {
+                                "opacity" : .2,
+                                "color"  : "#ff0000",
+                                "fillColor": "#ff0000",
+
+                }
+        }}}
+    });
+// .on('change', function(e){ 
+    // console.log(e);
+    // map.removeLayer(vtLayer);
+    // var sliderValue = slider.noUiSlider.get();
+    // console.log("sliderValue: ", sliderValue);
+
+    // data.features = clone.features.filter((feature) => {
+    //     return (feature.properties.sum_unobs_Gew1 >= parseFloat(e[0])) && (feature.properties.sum_unobs_Gew1 <= parseFloat(e[1]));
+
+    //     });
+    // console.log('min_val', Math.min(...getValue(data.features, 'sum_unobs_Gew1')));
+    // map.removeLayer(vtLayer);
+    // map.removeLayer(vtLayer2);
+     // L.removeTiles(map, layerId);
+    // var vtLayer2 = L.geoJson.vt(data, options);
+    // vtLayer2.addTo(map);
+// });
+
+</script>
