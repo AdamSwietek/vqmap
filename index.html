@@ -212,13 +212,25 @@
         // func to create colormap
         function getcmap(sel_var) { 
             if (sel_var == 'prob'){
-                cmap = chroma.scale('YlGnBu').classes([ 0,13.,  34.,  58.,  83., 100.]); 
+                cmap = chroma.scale('YlGnBu').classes([ 4.,  7., 10., 13., 16., 19., 23., 27., 30., 35., 39., 43., 48.,
+       54., 59., 66., 74., 81., 87., 96.]); 
             } else if (sel_var == 'bldg_count'){
-                cmap = chroma.scale('Greys').classes([0, 101.,  292.,  560.,  944., 2233.]); 
+                cmap = chroma.cubehelix().start(200).rotations(0.5).gamma(2).lightness([0.3, 0.8]).scale().classes([ 16.,   41.,   70.,  105.,  147.,  193.,  243.,  297.,  356.,
+        423.,  498.,  577.,  665.,  764.,  879., 1009., 1163., 1379.,
+       1724., 2233.]); 
             } else if (sel_var == 'net_income_ptp'){
-                cmap = chroma.scale('OrRd').classes([ 0,71.,  97., 160., 480., 965.]); 
+                cmap = chroma.scale('YlGn').classes([  64.,  75.,  86., 103., 128., 168., 215., 300., 480., 965.]); 
             } else if (sel_var == 'slope_median'){
-                cmap = chroma.scale('BrBG').classes([ 0., 2,  6., 10, 13., 17, 21.]); 
+                cmap = chroma.cubehelix().start(200).rotations(-0.5).gamma(0.8).lightness([0.3, 0.8]).scale().classes([1.,  2.,  3.,  5.,  7.,  9., 10., 12., 14., 16., 18., 20., 22.,
+       24., 27., 29., 31., 34., 37., 50.]); 
+            } else if (sel_var == 'avg'){
+                cmap = chroma.scale('PuBu').classes([79.,  83.,  85.,  87.,  90.,  92.,  94.,  96.,  98., 100., 103.,
+       107., 111., 115., 120., 127., 136., 146., 163., 173.]); 
+            } else if (sel_var == 'bldg_density'){
+                cmap = chroma.cubehelix().start(200).rotations(0.5).gamma(2).lightness([0.3, 0.8]).scale().classes([0.28060523,  0.49406176,  0.70538244,  0.90892857,  1.12977099,
+        1.4049236 ,  1.72067039,  2.08712871,  2.49537037,  2.92609254,
+        3.41061453,  3.95469256,  4.57841141,  5.19134396,  5.8372093 ,
+        6.57079646,  7.41176471,  8.63414634, 10.73529412, 13.64044944]); 
             } 
             return cmap
         };
