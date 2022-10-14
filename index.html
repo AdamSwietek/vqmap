@@ -29,6 +29,20 @@
             font-style: italic;
             color: #AAA;
         }
+
+        .info {
+            padding: 6px 8px;
+            font: 14px/16px Arial, Helvetica, sans-serif;
+            background: white;
+            background: rgba(255,255,255,0.8);
+            box-shadow: 0 0 15px rgba(0,0,0,0.2);
+            border-radius: 5px;
+            width: 200px
+        }
+        .info h4 {
+            margin: 0 0 5px;
+            color: #777;
+        }
     </style>
 </head>
 <body>
@@ -234,6 +248,32 @@
             } 
             return cmap
         };
+
+        function getpt_breaks(sel_var) { 
+            if (sel_var == 'prob'){
+                pt_breaks = [ 4.,  7., 10., 13., 16., 19., 23., 27., 30., 35., 39., 43., 48.,
+       54., 59., 66., 74., 81., 87., 96.]; 
+            } else if (sel_var == 'bldg_count'){
+                pt_breaks = [ 16.,   41.,   70.,  105.,  147.,  193.,  243.,  297.,  356.,
+        423.,  498.,  577.,  665.,  764.,  879., 1009., 1163., 1379.,
+       1724., 2233.]; 
+            } else if (sel_var == 'net_income_ptp'){
+                pt_breaks = [  64.,  75.,  86., 103., 128., 168., 215., 300., 480., 965.]; 
+            } else if (sel_var == 'slope_median'){
+                pt_breaks = [1.,  2.,  3.,  5.,  7.,  9., 10., 12., 14., 16., 18., 20., 22.,
+       24., 27., 29., 31., 34., 37., 50.]; 
+            } else if (sel_var == 'avg'){
+                pt_breaks = [79.,  83.,  85.,  87.,  90.,  92.,  94.,  96.,  98., 100., 103.,
+       107., 111., 115., 120., 127., 136., 146., 163., 173.]; 
+            } else if (sel_var == 'bldg_density'){
+                pt_breaks = [0.28060523,  0.49406176,  0.70538244,  0.90892857,  1.12977099,
+        1.4049236 ,  1.72067039,  2.08712871,  2.49537037,  2.92609254,
+        3.41061453,  3.95469256,  4.57841141,  5.19134396,  5.8372093 ,
+        6.57079646,  7.41176471,  8.63414634, 10.73529412, 13.64044944]; 
+            } 
+            return pt_breaks
+        };
+
         // define style and colors of  vectortile style
         var vectorTileStyling = {
             test_suisse_commune2_4326: function(properties, zoom) {
@@ -288,33 +328,128 @@
             vectorTileLayerStyles: vectorTileStyling,
         };
 
-
-    
         // get vector tiles URL
-        // var grp_var = $('input[name="grp_radio"]:checked').val();
         var mapUrl = {
             "hexbins": "tiles_suisse/{z}/{x}/{y}.pbf",
             "communes": "tiles_suisse_commune/{z}/{x}/{y}.pbf",
         };
  
-        // // create VectorGrid layer
-        var mapPbfLayer = new L.VectorGrid.Protobuf(mapUrl['hexbins'], mapVectorTileOptions)
+        var highlight;
+		var clearHighlight = function() {
+			if (highlight) {
+				pbfLayer.resetFeatureStyle(highlight);
+			}
+			highlight = null;
+		};
 
-        // var mapPbfLayer_com = new L.VectorGrid.Protobuf(mapUrl['communes'], mapVectorTileOptions)
-        mapPbfLayer.addTo(map);
-    
+        // // // create VectorGrid layer
         function updateMap(){  
             var grp_var = $('input[name="grp_radio"]:checked').val();
+            var metric_var = $('input[name="metric_radio"]:checked').val();
             // console.log(mapUrl[grp_var])
             var layersToRemove = [];
             var mapPbfLayer = new L.VectorGrid.Protobuf(mapUrl[grp_var], mapVectorTileOptions);
             map.eachLayer(function(layer){
-                console.log(layer)
-                layersToRemove = layer})
-            // console.log('this  ' + layersToRemove._url)
-            map.removeLayer(layersToRemove)
-            return mapPbfLayer.addTo(map)
+                // console.log(layer)
+                layersToRemove.push(layer)})
+            // console.log('this  ' + layersToRemove)
+            var arrayLength = layersToRemove.length;
+            for (var i = 1; i < arrayLength; i++) {
+                console.log(i);
+                //Do something
+                map.removeLayer(layersToRemove[i])
+            }
+            // map.eachLayer(function(layer){
+                // console.log(layer.properties['Agglo_Name'])})
+            return mapPbfLayer.on('mouseover', function (e) { 
+                // console.log(e.layer.properties['prob'])// this line and below 
+                L.popup()
+                .setContent(content_update(e.layer.properties))
+                .setLatLng(e.latlng)
+                .openOn(map);
+
+                info.update(e.layer.properties)
+                clearHighlight();
+				highlight = e.layer.properties.prob;
+				pbfLayer.setFeatureStyle(highlight, {
+					weight: 2,
+					color: 'red',
+					opacity: 1,
+					fillColor: 'red',
+					fill: true,
+					radius: 6,
+					fillOpacity: 1
+				})
+
+                }).addTo(map);
+                }
+            
+        content_update = function(props){
+            var metric_var = new $('input[name="metric_radio"]:checked').val();
+            return (props ?
+                '<h4>metric_var</h4>' +  
+                '<b>' + metric_var + ': </b>' + props[metric_var] + ' metric<br />'
+                : 'Hover over a state')
         }
+        updateMap()
+
+        var info = L.control();
+
+        info.onAdd = function (map) {
+            this._div = L.DomUtil.create('div', 'info'); // create a div with a class "info"
+            this.update();
+            return this._div;
+        };
+
+        form_text_options = {
+                'l_prob': "Proportion of buildings w Visual Capital greater than average Agglomeration VC",
+                'avg' : "Average Visual Capital (VC)",
+                'med':'Median Visual Capital (VC) for buildings within boundary',
+                'rich': "Numner of building with Visual Capital (VC) greater than CHF 100k",
+                'prob': "Proportion of building with Visual Capital (VC) greater than CHF 100k",
+                'cv' : "Coefficient of Variability of Visual Capital within boundary",
+                'net_income_ptp': "Average net-income pertaxpayer for a given commune",
+                'bldg_count': "Building Density within boundary",
+                'slope_median': 'Median slope of terrain within boundary',
+                'slope_mean': 'Average slope of terrain within boundary'
+            }
+        // method that we will use to update the control based on feature properties passed
+        info.update = function (props) {
+            var metric_var = new $('input[name="metric_radio"]:checked').val();
+            this._div.innerHTML = (props ?
+            '<h4>'+metric_var+'</h4>'+
+            '<span><small>'+form_text_options[metric_var]+'</small></span><br /><br />'+
+                '<b> add area name here </b><br />'+    
+                '<b>'+ props.prob +'%</b>' + ' High Visual Capital <br />'+
+                
+                '<b>CHF ' + props.net_income_ptp + 'k </b>' + 'net-income <br />'
+                : 'Hover over a region');
+        };
+
+        info.addTo(map);
+        // var legend = L.control({position: 'topright'});
+
+        // legend.onAdd = function (map) {
+        //     var color_var = new $('input[name="metric_radio"]:checked').val();
+        //     var div = L.DomUtil.create('div', 'info legend'),
+        //         grades = getpt_breaks(color_var),
+        //         labels = [];
+
+        //     // loop through our density intervals and generate a label with a colored square for each interval
+        //     for (var i = 0; i < grades.length; i++) {
+        //         var color_var = new $('input[name="metric_radio"]:checked').val();
+        //         var cmap = getcmap(color_var)
+        //         div.innerHTML +=
+        //             '<i style="background:' + cmap(grades[i] + 1) + '"></i> ' +
+        //             grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '<br>' : '+');
+        //     }
+
+        //     return div;
+        // };
+
+        // legend.addTo(map);
     </script>
 </body>
 </html>
+
+
