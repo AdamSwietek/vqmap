@@ -1,0 +1,9 @@
+Stuff to do
+
+update tiles
+    - agg by hex, communes, and agglo
+        get med of maxvsh abundant, vconfig, dist, vaccess
+        get 1pct prop of scarce
+        get 10pct prop of scarce
+
+
