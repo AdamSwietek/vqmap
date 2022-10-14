@@ -6,4 +6,5 @@ update tiles
         get 1pct prop of scarce
         get 10pct prop of scarce
 
-
+map 
+    - add download link buttons
