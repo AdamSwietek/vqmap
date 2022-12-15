@@ -87,17 +87,23 @@
                 <label for="metric-select">Choose Metric to Explore:</label>
                 <div id = "metric-select" class="btn-group" role="group" aria-label="Basic radio toggle button group">
                     <div> 
-                        <input type="radio" class="btn-check" name="metric_radio" id="metric-btnradio1" autocomplete="off" value="prob" checked >
-                        <label class="btn btn-outline-primary" for="metric-btnradio1">prob</label>
+                        <input type="radio" class="btn-check" name="metric_radio" id="metric-btnradio0" autocomplete="off" value="Gew1_1" checked >
+                        <label class="btn btn-outline-primary" for="metric-btnradio0">Gew1_1</label>
+
+                        <input type="radio" class="btn-check" name="metric_radio" id="metric-btnradio1" autocomplete="off" value="Ver11_1" checked >
+                        <label class="btn btn-outline-primary" for="metric-btnradio1">Ver11_1</label>
+
+                        <input type="radio" class="btn-check" name="metric_radio" id="metric-btnradio2" autocomplete="off" value="prob" checked >
+                        <label class="btn btn-outline-primary" for="metric-btnradio2">prob</label>
                     
-                        <input type="radio" class="btn-check" name="metric_radio" id="metric-btnradio2" autocomplete="off" value="net_income_ptp">
-                        <label class="btn btn-outline-primary" for="metric-btnradio2">net_income_ptp</label>
+                        <input type="radio" class="btn-check" name="metric_radio" id="metric-btnradio3" autocomplete="off" value="net_income_ptp">
+                        <label class="btn btn-outline-primary" for="metric-btnradio3">net_income_ptp</label>
 
-                        <input type="radio" class="btn-check" name="metric_radio" id="metric-btnradio3" autocomplete="off" value="bldg_count">
-                        <label class="btn btn-outline-primary" for="metric-btnradio3">bldg_count</label>
+                        <input type="radio" class="btn-check" name="metric_radio" id="metric-btnradio4" autocomplete="off" value="bldg_count">
+                        <label class="btn btn-outline-primary" for="metric-btnradio4">bldg_count</label>
 
-                        <input type="radio" class="btn-check" name="metric_radio" id="metric-btnradio4" autocomplete="off" value="slope_median">
-                        <label class="btn btn-outline-primary" for="metric-btnradio4">slope_median</label>
+                        <input type="radio" class="btn-check" name="metric_radio" id="metric-btnradio6" autocomplete="off" value="slope_median">
+                        <label class="btn btn-outline-primary" for="metric-btnradio6">slope_median</label>
                     </div>
                 </div>
                 <div id="metriclog"> </div>
@@ -204,8 +210,8 @@
         // create map
         var map = L.map('map', {
             center: [46.4414,6.5295],
-            minZoom: 8,
-            maxZoom: 15,
+            minZoom: 9,
+            maxZoom: 16,
             zoomControl: true,
             zoom: 10,
         });
@@ -226,12 +232,16 @@
         // func to create colormap
         function getcmap(sel_var) { 
             if (sel_var == 'prob'){
-                cmap = chroma.scale('YlGnBu').classes([ 4.,  7., 10., 13., 16., 19., 23., 27., 30., 35., 39., 43., 48.,
-       54., 59., 66., 74., 81., 87., 96.]); 
+                cmap = chroma.scale('YlGnBu').classes([ .04,  .07, .10, .13, .16, .19, .23, .27, .30, .35, .39, .43, .48,
+       .54, .59, .66, .74, .81, .87, .96]); 
             } else if (sel_var == 'bldg_count'){
                 cmap = chroma.cubehelix().start(200).rotations(0.5).gamma(2).lightness([0.3, 0.8]).scale().classes([ 16.,   41.,   70.,  105.,  147.,  193.,  243.,  297.,  356.,
         423.,  498.,  577.,  665.,  764.,  879., 1009., 1163., 1379.,
        1724., 2233.]); 
+        } else if (sel_var == 'Ver11_1'){
+                    cmap = chroma.cubehelix().start(200).rotations(0.5).gamma(2).lightness([0.3, 0.8]).scale().classes([ 0,5,10,15,20,25,30,35,40,45,50,60,70,80,90,110]); 
+        } else if (sel_var == 'Gew1_1'){
+                        cmap = chroma.cubehelix().start(200).rotations(0.5).gamma(2).lightness([0.3, 0.8]).scale().classes([ 0,5,10,15,20,25,30,35,40,45,50,60,70,80,90,110]); 
             } else if (sel_var == 'net_income_ptp'){
                 cmap = chroma.scale('YlGn').classes([  64.,  75.,  86., 103., 128., 168., 215., 300., 480., 965.]); 
             } else if (sel_var == 'slope_median'){
@@ -240,7 +250,7 @@
             } else if (sel_var == 'avg'){
                 cmap = chroma.scale('PuBu').classes([79.,  83.,  85.,  87.,  90.,  92.,  94.,  96.,  98., 100., 103.,
        107., 111., 115., 120., 127., 136., 146., 163., 173.]); 
-            } else if (sel_var == 'bldg_density'){
+            } else if (sel_var == 'bldg_count'){
                 cmap = chroma.cubehelix().start(200).rotations(0.5).gamma(2).lightness([0.3, 0.8]).scale().classes([0.28060523,  0.49406176,  0.70538244,  0.90892857,  1.12977099,
         1.4049236 ,  1.72067039,  2.08712871,  2.49537037,  2.92609254,
         3.41061453,  3.95469256,  4.57841141,  5.19134396,  5.8372093 ,
@@ -251,8 +261,8 @@
 
         function getpt_breaks(sel_var) { 
             if (sel_var == 'prob'){
-                pt_breaks = [ 4.,  7., 10., 13., 16., 19., 23., 27., 30., 35., 39., 43., 48.,
-       54., 59., 66., 74., 81., 87., 96.]; 
+                pt_breaks = [ .04,  .07, .10, .13, .16, .19, .23, .27, .30, .35, .39, .43, .48,
+       .54, .59, .66, .74, .81, .87, .96]; 
             } else if (sel_var == 'bldg_count'){
                 pt_breaks = [ 16.,   41.,   70.,  105.,  147.,  193.,  243.,  297.,  356.,
         423.,  498.,  577.,  665.,  764.,  879., 1009., 1163., 1379.,
@@ -276,7 +286,7 @@
 
         // define style and colors of  vectortile style
         var vectorTileStyling = {
-            test_suisse_commune2_4326: function(properties, zoom) {
+                suisse_commune_4326: function(properties, zoom) {
 
                 var color_var = new $('input[name="metric_radio"]:checked').val();
                 var cmap = getcmap(color_var);
@@ -296,7 +306,7 @@
                     opacity: 1.0,
                 });
                 },
-            test_suisse_hexbin_4326: function(properties, zoom) {
+                suisse_hexbin_4326: function(properties, zoom) {
 
                 var color_var = new $('input[name="metric_radio"]:checked').val();
                 var cmap = getcmap(color_var);
@@ -330,8 +340,8 @@
 
         // get vector tiles URL
         var mapUrl = {
-            "hexbins": "tiles_suisse/{z}/{x}/{y}.pbf",
-            "communes": "tiles_suisse_commune/{z}/{x}/{y}.pbf",
+            "hexbins": "tiles_hexbin_151222/{z}/{x}/{y}.pbf",
+            "communes": "tiles_commune_151222/{z}/{x}/{y}.pbf",
         };
  
         var highlight;
