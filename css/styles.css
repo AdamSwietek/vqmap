@@ -1,0 +1,41 @@
+ul {
+    display: flex;
+    justify-content: center;
+    overflow-x: auto;
+  }
+li {
+    list-style-type: none;
+}
+
+button {
+    margin-bottom: 8px;
+} */
+
+
+/* Control both side */
+/* .leftside, .rightside {
+    height: 100vh,
+} */
+/* Control the left side */
+/* .leftside {
+    background: whitesmoke;
+} */
+
+/* Control the right side
+.rightside {
+    background: whitesmoke;
+} */
+
+.navbar a{
+    font-family: Verdana !important;
+    height: 200px;
+}
+
+
+
+@media screen and (min-width:800px)
+{
+    .leftside, .rightside {
+        height: 50vh,
+    }
+}
