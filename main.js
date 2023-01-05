@@ -40,18 +40,78 @@ const attr_breaks = {
 };
 
 
+const attr_pal = {
+    "Abb7_1": "Spectral",
+    "Abw14_1":"Spectral",
+    "Flu18_1":"Spectral",
+    "Gew1_1":"viridis",
+    "Hel19_1":"Spectral",
+    "Keh15_1":"Spectral",
+    "Lan10_1":"Spectral",
+    "Lan17_1":"Spectral",
+    "Sak13_1":"Spectral",
+    "Ueb5_1":"Spectral",
+    "Ver11_1":"Spectral",
+    "Was16_1":"Spectral",
+    "Dac1":"Spectral",
+    "Fas2":"Spectral",
+    "Geb12":"Spectral",
+    "Kue8":"Spectral",
+    "Nat3":"viridis",
+    "Veg3":"Spectral",
+    "Ver6":"Spectral",
+    "sky":"Spectral",
+    "z_resid":"icefire",
+    "net_income_ptp":"Spectral",
+    "slope_median":"cubehelix",
+    "rich":"cubehelix",
+    "med":"cubehelix",
+    "bldg_count":"cubehelix",
+    "gini":"mako",
+    "cmpx_rh":"mako",
+    "snt_Neg":"mako",
+    "snt_Pos":"mako",
+    "rh_snt_0":"mako",
+    "pano_sum":"mako",
+    "pano_rh":"mako",
+    "refuge":"mako",
+    "cmpx_shanon":"mako",
+    "cmpx_gini":"mako",
+    "dist_gini":"mako",
+};
+
+
+const color_dict = {
+    "YlGnBu":{"0":"#f2fabc","1":"#dcf1b2","2":"#bbe4b5","3":"#85cfba","4":"#57bec1","5":"#34a9c3","6":"#1d8dbe","7":"#2166ac","8":"#24479d","9":"#1d2e83"},
+    "Spectral":{"0":"#d0384e","1":"#ee6445","2":"#fa9b58","3":"#fece7c","4":"#fff1a8","5":"#f4faad","6":"#d1ed9c","7":"#97d5a4","8":"#5cb7aa","9":"#3682ba"},
+    "rocket":{"0":"#221331","1":"#451c47","2":"#691f55","3":"#921c5b","4":"#b91657","5":"#d92847","6":"#ed503e","7":"#f47d57","8":"#f6a47c","9":"#f7c9aa"},
+    "flare":{"0":"#eb9973","1":"#e88366","2":"#e46c5d","3":"#db565d","4":"#cc4664","5":"#b73d6b","6":"#a1386f","7":"#8b3271","8":"#752d6f","9":"#602969"},
+    "coolwarm":{"0":"#5673e0","1":"#7597f6","2":"#94b6ff","3":"#b5cdfa","4":"#d1dae9","5":"#e8d6cc","6":"#f5c1a9","7":"#f6a283","8":"#ea7b60","9":"#d44e41"},
+    "RdBu":{"0":"#ab162a","1":"#cf5246","2":"#eb9172","3":"#fac8af","4":"#faeae1","5":"#e6eff4","6":"#bbdaea","7":"#7bb6d6","8":"#3c8abe","9":"#1e61a5"},
+    "mako":{"0":"#231526","1":"#35264c","2":"#403974","3":"#3d5296","4":"#366da0","5":"#3487a6","6":"#35a1ab","7":"#44bcad","8":"#6dd3ad","9":"#aee3c0"},
+    "viridis":{"0":"#482173","1":"#433e85","2":"#38588c","3":"#2d708e","4":"#25858e","5":"#1e9b8a","6":"#2ab07f","7":"#52c569","8":"#86d549","9":"#c2df23"},
+    "cubehelix":{"0":"#19122b","1":"#17344c","2":"#185b48","3":"#3c7632","4":"#7e7a36","5":"#bc7967","6":"#d486af","7":"#caa9e7","8":"#c2d2f3","9":"#d6f0ef"},
+    "icefire":{"0":"#7bbbce","1":"#3f90ce","2":"#475cbc","3":"#3b3866","4":"#22222b","5":"#2d1f21","6":"#622937","7":"#a83044","8":"#dc5534","9":"#f29558"}
+}
+
+// console.log(color_dict['YlGnBu'])
 function getColor(d, attr) {
-        
-    return d > attr_breaks[attr][8]  ? '#ffffd9' :
-        d > attr_breaks[attr][7]  ? '#edf8b1' :
-        d > attr_breaks[attr][6]  ? '#c7e9b4' :
-        d > attr_breaks[attr][5]   ? '#7fcdbb' :
-        d > attr_breaks[attr][4] ? '#41b6c4' :
-        d > attr_breaks[attr][3]  ? '#1d91c0' :
-        d > attr_breaks[attr][2]  ? '#225ea8' :
-        d > attr_breaks[attr][1]  ? '#253494' :
-        d > attr_breaks[attr][0]   ? '#081d58' :
-                                    '#0c2c84';
+
+    var break_val = attr_breaks[attr];
+    var pal = attr_pal[attr];
+    var colorlst = color_dict[pal];
+    console.log(pal);
+    // breakvalue list is offset by 1 bc the last position is the maximum value of series
+    return d > break_val[8]  ? colorlst[9] :
+            d > break_val[7]  ? colorlst[8] :
+            d > break_val[6]  ? colorlst[7] :
+            d > break_val[5]  ? colorlst[6] :
+            d > break_val[4]  ? colorlst[5] :
+            d > break_val[3]  ? colorlst[4] :
+            d > break_val[2]  ? colorlst[3] :
+            d > break_val[1]  ? colorlst[2] :
+            d > break_val[0]  ? colorlst[1] :
+                                colorlst[0];
     };
 
 var button0Names = ["communes", "hexbins"];
