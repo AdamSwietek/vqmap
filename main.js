@@ -61,6 +61,7 @@ const attr_pal = {
     "Veg3":"Spectral",
     "Ver6":"Spectral",
     "sky":"Spectral",
+    "prob":'icefire',
     "z_resid":"icefire",
     "net_income_ptp":"Spectral",
     "slope_median":"cubehelix",
@@ -96,22 +97,21 @@ const color_dict = {
 
 // console.log(color_dict['YlGnBu'])
 function getColor(d, attr) {
-
-    var break_val = attr_breaks[attr];
-    var pal = attr_pal[attr];
-    var colorlst = color_dict[pal];
-    console.log(pal);
+    // var break_val = attr_breaks[attr];
+    // var pal = attr_pal[attr];
+    // var colorlst = color_dict[pal];
+    // console.log(pal);
     // breakvalue list is offset by 1 bc the last position is the maximum value of series
-    return d > break_val[8]  ? colorlst[9] :
-            d > break_val[7]  ? colorlst[8] :
-            d > break_val[6]  ? colorlst[7] :
-            d > break_val[5]  ? colorlst[6] :
-            d > break_val[4]  ? colorlst[5] :
-            d > break_val[3]  ? colorlst[4] :
-            d > break_val[2]  ? colorlst[3] :
-            d > break_val[1]  ? colorlst[2] :
-            d > break_val[0]  ? colorlst[1] :
-                                colorlst[0];
+    return d > attr_breaks[attr][8]  ? color_dict[attr_pal[attr]][9] :
+            d > attr_breaks[attr][7]  ? color_dict[attr_pal[attr]][8] :
+            d > attr_breaks[attr][6]  ? color_dict[attr_pal[attr]][7] :
+            d > attr_breaks[attr][5]  ? color_dict[attr_pal[attr]][6] :
+            d > attr_breaks[attr][4]  ? color_dict[attr_pal[attr]][5] :
+            d > attr_breaks[attr][3]  ? color_dict[attr_pal[attr]][4] :
+            d > attr_breaks[attr][2]  ? color_dict[attr_pal[attr]][3] :
+            d > attr_breaks[attr][1]  ? color_dict[attr_pal[attr]][2] :
+            d > attr_breaks[attr][0]  ? color_dict[attr_pal[attr]][1] :
+            color_dict[attr_pal[attr]][0];
     };
 
 var button0Names = ["communes", "hexbins"];
