@@ -19,7 +19,7 @@ rename_col = {
        'snt_Neg':'NegativeSentiment', 
        'snt_Pos':'PositiveSentiment', 
        'rh_snt_0':'RichnessNeutralSentiment', 
-       'dist_gini':'DistanceIneq', 
+       'dist_gini':'vDistanceIneq', 
        'pano_sum':'Panorama',
        'pano_rh':'RichnessPanorama', 
        'refuge':'Refuge', 

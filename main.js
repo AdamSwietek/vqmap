@@ -1,43 +1,48 @@
-const attr_breaks = {
-    "Abb7_1":{"0":0.01,"1":0.04,"2":0.08,"3":0.13,"4":0.19,"5":0.26,"6":0.38,"7":0.56,"8":0.8,"9":1.0},
-    "Abw14_1":{"0":0.01,"1":0.03,"2":0.07,"3":0.13,"4":0.21,"5":0.3,"6":0.42,"7":0.56,"8":0.69,"9":1.0},
-    "Flu18_1":{"0":0.01,"1":0.06,"2":0.13,"3":0.2,"4":0.27,"5":0.33,"6":0.41,"7":0.5,"8":0.71,"9":1.0},
-    "Gew1_1":{"0":0.03,"1":0.09,"2":0.17,"3":0.26,"4":0.35,"5":0.46,"6":0.6,"7":0.76,"8":0.91,"9":1.0},
-    "Hel19_1":{"0":0.0,"1":0.01,"2":0.02,"3":0.03,"4":0.04,"5":0.05,"6":0.07,"7":0.08,"8":0.1,"9":0.11},
-    "Keh15_1":{"0":0.0,"1":0.02,"2":0.04,"3":0.11,"4":0.17,"5":0.2,"6":0.24,"7":0.28,"8":0.41,"9":0.53},
-    "Lan10_1":{"0":0.06,"1":0.19,"2":0.3,"3":0.41,"4":0.53,"5":0.64,"6":0.75,"7":0.86,"8":0.95,"9":1.0},
-    "Lan17_1":{"0":0.02,"1":0.06,"2":0.11,"3":0.18,"4":0.29,"5":0.45,"6":0.6,"7":0.69,"8":0.88,"9":1.0},
-    "Sak13_1":{"0":0.0,"1":0.01,"2":0.03,"3":0.06,"4":0.11,"5":0.21,"6":0.36,"7":0.57,"8":0.75,"9":1.0},
-    "Ueb5_1":{"0":0.01,"1":0.03,"2":0.06,"3":0.09,"4":0.13,"5":0.19,"6":0.31,"7":0.5,"8":0.8,"9":1.0},
-    "Ver11_1":{"0":0.0,"1":0.02,"2":0.05,"3":0.09,"4":0.13,"5":0.19,"6":0.27,"7":0.4,"8":0.6,"9":1.0},
-    "Was16_1":{"0":0.0,"1":0.01,"2":0.03,"3":0.05,"4":0.08,"5":0.13,"6":0.21,"7":0.35,"8":0.67,"9":1.0},
-    "Dac1":{"0":0.395,"1":1.05,"2":1.77,"3":2.63,"4":4.29,"5":7.855,"6":13.13,"7":19.295,"8":29.66,"9":47.34},
-    "Fas2":{"0":2.685,"1":7.31,"2":11.9,"3":16.235,"4":20.545,"5":25.345,"6":31.83,"7":41.915,"8":59.265,"9":99.1},
-    "Geb12":{"0":2.125,"1":4.895,"2":7.44,"3":9.865,"4":12.605,"5":16.69,"6":24.07,"7":38.5,"8":67.75,"9":100.0},
-    "Kue8":{"0":5.46,"1":15.095,"2":23.18,"3":29.52,"4":33.885,"5":37.11,"6":39.55,"7":41.465,"8":43.67,"9":61.41},
-    "Nat3":{"0":4.03,"1":10.84,"2":19.77,"3":30.98,"4":40.94,"5":47.71,"6":53.81,"7":61.47,"8":77.62,"9":100.0},
-    "Veg3":{"0":7.765,"1":13.54,"2":18.035,"3":22.5,"4":27.645,"5":33.925,"6":42.13,"7":52.92,"8":66.28,"9":100.0},
-    "Ver6":{"0":0.87,"1":2.465,"2":4.215,"3":6.025,"4":8.04,"5":10.63,"6":14.37,"7":20.795,"8":31.77,"9":65.8},
-    "sky":{"0":11.54,"1":21.98,"2":28.48,"3":32.9,"4":36.35,"5":39.25,"6":41.84,"7":44.065,"8":46.125,"9":52.3},
-    "prob":{"0":0.0400471143,"1":0.1081081081,"2":0.1903409091,"3":0.2926829268,"4":0.4151472651,"5":0.5352112676,"6":0.6454545455,"7":0.7678571429,"8":0.9117647059,"9":1.0},
-    "z_resid":{"0":-6.9927525054,"1":-2.4518766177,"2":-1.2116360794,"3":-0.4652309489,"4":0.0542535574,"5":0.502108377,"6":1.0134915866,"7":1.6407808679,"8":2.4751938426,"9":5.1049555894},
-    "net_income_ptp":{"0":62.1009756098,"1":72.8,"2":85.16,"3":102.4314666667,"4":125.4779220779,"5":162.92456,"6":227.310106383,"7":300.14,"8":705.1871428571,"9":965.08},
-    "slope_median":{"0":2.7491133213,"1":5.7342841625,"2":9.0996456146,"3":12.8564176559,"4":16.8125171661,"5":20.8959541321,"6":25.1678504944,"7":29.7307367325,"8":35.0857982635,"9":50.3575305939},
-    "rich":{"0":14.0,"1":40.0,"2":81.0,"3":137.0,"4":208.0,"5":297.0,"6":413.0,"7":582.0,"8":852.0,"9":1351.0},
-    "med":{"0":75.2230682373,"1":83.0710525513,"2":89.1394348145,"3":94.2605056763,"4":99.8994903564,"5":107.4875564575,"6":117.1840438843,"7":129.658203125,"8":150.9007568359,"9":206.5233306885},
-    "bldg_count":{"0":39.0,"1":107.0,"2":198.0,"3":314.0,"4":453.0,"5":617.0,"6":808.0,"7":1051.0,"8":1379.0,"9":2233.0},
-    "gini":{"0":0.0132154034,"1":0.0302427539,"2":0.0414943015,"3":0.0541968385,"4":0.0675846114,"5":0.0815278311,"6":0.0972849566,"7":0.119344607,"8":0.1610778078,"9":0.2929458407},
-    "cmpx_rh":{"0":3.5,"1":4.5,"2":5.5,"3":6.0,"4":7.0,"5":8.0,"6":9.0,"7":10.0,"8":11.5,"9":16.0},
-    "snt_Neg":{"0":0.4504,"1":1.226,"2":2.0515,"3":2.994,"4":4.355,"5":6.676,"6":11.27,"7":19.06,"8":28.5,"9":42.6},
-    "snt_Pos":{"0":16.92,"1":26.67,"2":30.83,"3":33.86,"4":37.02,"5":40.6,"6":44.89,"7":50.27,"8":57.63,"9":100.0},
-    "rh_snt_0":{"0":1.5,"1":2.5,"2":3.5,"3":4.0,"4":4.5,"5":5.0,"6":6.0,"7":7.0,"8":8.0,"9":10.0},
-    "pano_sum":{"0":1.783,"1":3.52,"2":5.65,"3":8.093,"4":10.748,"5":13.755,"6":17.46,"7":22.28,"8":29.34,"9":46.5},
-    "pano_rh":{"0":4.0,"1":7.0,"2":10.0,"3":13.0,"4":16.5,"5":19.5,"6":23.0,"7":26.0,"8":29.5,"9":43.0},
-    "refuge":{"0":0.27515,"1":0.4827,"2":0.61555,"3":0.72465,"4":0.8688,"5":1.071,"6":1.3615,"7":1.849,"8":2.875,"9":5.55},
-    "cmpx_shanon":{"0":0.83085,"1":0.9885,"2":1.0975,"3":1.182,"4":1.265,"5":1.3475,"6":1.42475,"7":1.4925,"8":1.569,"9":1.801},
-    "cmpx_gini":{"0":0.8125,"1":0.8255,"2":0.8355,"3":0.845,"4":0.85525,"5":0.8653,"6":0.87545,"7":0.88735,"8":0.90225,"9":0.952},
-    "dist_gini":{"0":0.3345,"1":0.39965,"2":0.44525,"3":0.48195,"4":0.51305,"5":0.5386,"6":0.5665,"7":0.6097,"8":0.67505,"9":0.75}
-};
+const attr_breaks ={
+    "bldg_count":{"0":36.0,"1":96.0,"2":177.0,"3":279.0,"4":408.0,"5":562.0,"6":750.0,"7":995.0,"8":1337.0,"9":2233.0},
+    "rich":{"0":12.0,"1":37.0,"2":77.0,"3":135.0,"4":207.0,"5":297.0,"6":416.0,"7":582.0,"8":852.0,"9":1351.0},
+    "prob":{"0":0.03,"1":0.1,"2":0.18,"3":0.27,"4":0.36,"5":0.46,"6":0.58,"7":0.73,"8":0.9,"9":1.0},
+    "cv":{"0":0.0199999996,"1":0.0599999987,"2":0.0799999982,"3":0.1000000015,"4":0.1299999952,"5":0.1599999964,"6":0.1899999976,"7":0.2399999946,"8":0.3400000036,"9":0.5699999928},
+    "gini":{"0":0.01,"1":0.03,"2":0.04,"3":0.05,"4":0.06,"5":0.07,"6":0.09,"7":0.11,"8":0.15,"9":0.29},
+    "med":{"0":73.0,"1":82.0,"2":89.0,"3":95.0,"4":101.0,"5":108.0,"6":117.0,"7":130.0,"8":151.0,"9":207.0},
+    "avg":{"0":77.0,"1":84.0,"2":90.0,"3":96.0,"4":102.0,"5":110.0,"6":120.0,"7":133.0,"8":155.0,"9":203.0},
+    "l_prob":{"0":0.05,"1":0.15,"2":0.26,"3":0.36,"4":0.45,"5":0.54,"6":0.65,"7":0.78,"8":0.92,"9":1.0},
+    "net_income_ptp":{"0":62.0,"1":73.0,"2":85.0,"3":102.0,"4":126.0,"5":163.0,"6":230.0,"7":300.0,"8":705.0,"9":965.0},
+    "z_resid":{"0":-6.79,"1":-2.26,"2":-1.03,"3":-0.33,"4":0.16,"5":0.6,"6":1.1,"7":1.71,"8":2.53,"9":5.1},
+    "slope_median":{"0":2.0,"1":6.0,"2":9.0,"3":13.0,"4":17.0,"5":21.0,"6":26.0,"7":31.0,"8":36.0,"9":50.0},
+    "slope_mean":{"0":2.0,"1":5.0,"2":9.0,"3":13.0,"4":17.0,"5":21.0,"6":25.0,"7":30.0,"8":35.0,"9":48.0},
+    "cmpx_rh":{"0":3.0,"1":4.0,"2":5.0,"3":6.0,"4":7.0,"5":8.0,"6":9.0,"7":10.0,"8":11.0,"9":16.0},
+    "cmpx_shanon":{"0":0.79,"1":0.95,"2":1.07,"3":1.16,"4":1.24,"5":1.33,"6":1.42,"7":1.49,"8":1.57,"9":1.8},
+    "cmpx_gini":{"0":0.81,"1":0.82,"2":0.83,"3":0.84,"4":0.85,"5":0.86,"6":0.87,"7":0.88,"8":0.9,"9":0.95},
+    "snt_0":{"0":28.0,"1":34.0,"2":38.0,"3":41.0,"4":44.0,"5":46.0,"6":49.0,"7":56.0,"8":74.0,"9":100.0},
+    "snt_Neg":{"0":0.0,"1":1.0,"2":2.0,"3":3.0,"4":4.0,"5":6.0,"6":11.0,"7":19.0,"8":28.0,"9":43.0},
+    "snt_Pos":{"0":17.0,"1":27.0,"2":31.0,"3":34.0,"4":37.0,"5":41.0,"6":46.0,"7":51.0,"8":57.0,"9":100.0},
+    "rh_snt_0":{"0":1.0,"1":2.0,"2":3.0,"3":4.0,"4":5.0,"5":6.0,"6":7.0,"7":8.0,"8":9.0,"9":10.0},
+    "dist_gini":{"0":0.33,"1":0.39,"2":0.43,"3":0.47,"4":0.5,"5":0.53,"6":0.55,"7":0.59,"8":0.65,"9":0.75},
+    "pano_sum":{"0":1.0,"1":3.0,"2":5.0,"3":7.0,"4":9.0,"5":11.0,"6":14.0,"7":19.0,"8":26.0,"9":46.0},
+    "pano_rh":{"0":4.0,"1":8.0,"2":11.0,"3":14.0,"4":17.0,"5":19.0,"6":22.0,"7":25.0,"8":28.0,"9":43.0},
+    "Dac1":{"0":0.0,"1":1.0,"2":2.0,"3":3.0,"4":5.0,"5":9.0,"6":13.0,"7":19.0,"8":29.0,"9":47.0},
+    "Fas2":{"0":3.0,"1":8.0,"2":13.0,"3":16.0,"4":20.0,"5":25.0,"6":31.0,"7":41.0,"8":58.0,"9":99.0},
+    "Geb12":{"0":2.0,"1":4.0,"2":7.0,"3":9.0,"4":12.0,"5":16.0,"6":23.0,"7":38.0,"8":68.0,"9":100.0},
+    "Kue8":{"0":3.0,"1":11.0,"2":19.0,"3":27.0,"4":33.0,"5":36.0,"6":39.0,"7":41.0,"8":44.0,"9":61.0},
+    "Nat3":{"0":3.0,"1":9.0,"2":17.0,"3":28.0,"4":39.0,"5":47.0,"6":53.0,"7":60.0,"8":73.0,"9":100.0},
+    "Veg3":{"0":7.0,"1":13.0,"2":18.0,"3":22.0,"4":27.0,"5":34.0,"6":42.0,"7":51.0,"8":63.0,"9":100.0},
+    "Ver6":{"0":0.0,"1":2.0,"2":4.0,"3":6.0,"4":8.0,"5":12.0,"6":16.0,"7":23.0,"8":35.0,"9":66.0},
+    "sky":{"0":7.0,"1":16.0,"2":24.0,"3":30.0,"4":33.0,"5":37.0,"6":40.0,"7":43.0,"8":45.0,"9":52.0},
+    "Abb7_1":{"0":1.0,"1":4.0,"2":8.0,"3":13.0,"4":20.0,"5":29.0,"6":41.0,"7":57.0,"8":80.0,"9":100.0},
+    "Abw14_1":{"0":1.0,"1":4.0,"2":9.0,"3":15.0,"4":22.0,"5":31.0,"6":42.0,"7":56.0,"8":69.0,"9":100.0},
+    "Flu18_1":{"0":1.0,"1":6.0,"2":13.0,"3":20.0,"4":31.0,"5":41.0,"6":50.0,"7":71.0,"8":92.0,"9":100.0},
+    "Gew1_1":{"0":2.0,"1":8.0,"2":15.0,"3":24.0,"4":34.0,"5":45.0,"6":59.0,"7":75.0,"8":91.0,"9":100.0},
+    "Hel19_1":{"0":0.0,"1":1.0,"2":2.0,"3":3.0,"4":4.0,"5":5.0,"6":7.0,"7":8.0,"8":10.0,"9":11.0},
+    "Keh15_1":{"0":0.0,"1":2.0,"2":4.0,"3":11.0,"4":17.0,"5":20.0,"6":24.0,"7":28.0,"8":41.0,"9":53.0},
+    "Lan10_1":{"0":6.0,"1":19.0,"2":31.0,"3":43.0,"4":55.0,"5":65.0,"6":74.0,"7":84.0,"8":94.0,"9":100.0},
+    "Lan17_1":{"0":1.0,"1":5.0,"2":11.0,"3":18.0,"4":29.0,"5":45.0,"6":60.0,"7":69.0,"8":88.0,"9":100.0},
+    "Sak13_1":{"0":0.0,"1":1.0,"2":3.0,"3":6.0,"4":11.0,"5":21.0,"6":36.0,"7":57.0,"8":75.0,"9":100.0},
+    "Ueb5_1":{"0":1.0,"1":3.0,"2":6.0,"3":9.0,"4":15.0,"5":24.0,"6":36.0,"7":50.0,"8":80.0,"9":100.0},
+    "Ver11_1":{"0":1.0,"1":3.0,"2":6.0,"3":10.0,"4":15.0,"5":20.0,"6":27.0,"7":40.0,"8":60.0,"9":100.0},
+    "Was16_1":{"0":0.0,"1":1.0,"2":3.0,"3":5.0,"4":9.0,"5":14.0,"6":22.0,"7":35.0,"8":67.0,"9":100.0}
+}
+
 
 
 const attr_pal = {
@@ -64,7 +69,7 @@ const attr_pal = {
     "prob":'icefire',
     "z_resid":"icefire",
     "net_income_ptp":"Spectral",
-    "slope_median":"cubehelix",
+    "slope_median":"mako",
     "rich":"cubehelix",
     "med":"cubehelix",
     "bldg_count":"cubehelix",
@@ -80,6 +85,64 @@ const attr_pal = {
     "cmpx_gini":"mako",
     "dist_gini":"mako",
 };
+
+icon_dict = {'bldg_count': 'images/icons/icon-01.png',
+'rich': 'images/icons/icon-02.png',
+'prob': 'images/icons/icon-03.png',
+'cv': 'images/icons/icon-04.png',
+'gini': 'images/icons/icon-05.png',
+'med': 'images/icons/icon-06.png',
+'avg': 'images/icons/icon-07.png',
+'l_prob': 'images/icons/icon-08.png',
+'net_income_ptp': 'images/icons/icon-09.png',
+'z_resid': 'images/icons/icon-10.png',
+'slope_median': 'images/icons/icon-11.png',
+'slope_mean': 'images/icons/icon-12.png',
+'cmpx_rh': 'images/icons/icon-13.png',
+'cmpx_shanon': 'images/icons/icon-14.png',
+'cmpx_gini': 'images/icons/icon-15.png',
+'snt_0': 'images/icons/icon-16.png',
+'snt_Neg': 'images/icons/icon-17.png',
+'snt_Pos': 'images/icons/icon-18.png',
+'rh_snt_0': 'images/icons/icon-19.png',
+'dist_gini': 'images/icons/icon-20.png',
+'pano_sum': 'images/icons/icon-21.png',
+'pano_rh': 'images/icons/icon-22.png',
+'refuge': 'images/icons/icon-23.png',
+'Dac1': 'images/icons/icon-24.png',
+'Fas2': 'images/icons/icon-25.png',
+'Geb12': 'images/icons/icon-26.png',
+'Kue8': 'images/icons/icon-27.png',
+'Nat3': 'images/icons/icon-28.png',
+'Veg3': 'images/icons/icon-29.png',
+'Ver6': 'images/icons/icon-30.png',
+'sky': 'images/icons/icon-31.png',
+'Abb7_1': 'images/icons/icon-32.png',
+'Abw14_1': 'images/icons/icon-33.png',
+'Flu18_1': 'images/icons/icon-34.png',
+'Gew1_1': 'images/icons/icon-35.png',
+'Hel19_1': 'images/icons/icon-36.png',
+'Keh15_1': 'images/icons/icon-37.png',
+'Lan10_1': 'images/icons/icon-38.png',
+'Lan17_1': 'images/icons/icon-39.png',
+'Sak13_1': 'images/icons/icon-40.png',
+'Sie9_1': 'images/icons/icon-41.png',
+'Ueb5_1': 'images/icons/icon-42.png',
+'Ver11_1': 'images/icons/icon-43.png',
+'Was16_1': 'images/icons/icon-44.png',
+'Abb7_10': 'images/icons/icon-45.png',
+'Abw14_10': 'images/icons/icon-46.png',
+'Flu18_10': 'images/icons/icon-47.png',
+'Gew1_10': 'images/icons/icon-48.png',
+'Hel19_10': 'images/icons/icon-49.png',
+'Keh15_10': 'images/icons/icon-50.png',
+'Lan10_10': 'images/icons/icon-51.png',
+'Lan17_10': 'images/icons/icon-52.png',
+'Sak13_10': 'images/icons/icon-53.png',
+'Sie9_10': 'images/icons/icon-54.png',
+'Ueb5_10': 'images/icons/icon-55.png',
+'Ver11_10': 'images/icons/icon-56.png',
+'Was16_10': 'images/icons/icon-57.png'}
 
 
 const color_dict = {
@@ -139,10 +202,10 @@ navBarpanel.appendChild(button0List);
 // sidepanel.appendChild(buttonList);
 var attr_names = {
     'All-Measure' : Object.keys(attr_breaks),
-    'Scarce-Elements' : Object.keys(attr_breaks).slice(0, 12),
-    'Abundant-Elements': Object.keys(attr_breaks).slice(12, 20), 
-    'Urban-Natural-Form': Object.keys(attr_breaks).slice(20, 27), 
-    'View-Configuration':Object.keys(attr_breaks).slice(27, 35),
+    'Scarce-Elements' : ['Abb7_1','Abw14_1', 'Flu18_1', 'Gew1_1', 'Hel19_1', 'Keh15_1', 'Lan10_1','Lan17_1', 'Sak13_1', 'Ueb5_1', 'Ver11_1', 'Was16_1'],
+    'Abundant-Elements': ['Dac1','Fas2', 'Geb12', 'Kue8', 'Nat3', 'Veg3', 'Ver6', 'sky'], 
+    'Urban-Natural-Form': ['prob', 'z_resid', 'net_income_ptp', 'slope_median', 'rich', 'med','bldg_count','gini'], 
+    'View-Configuration':['cmpx_rh', 'snt_Neg', 'snt_Pos', 'rh_snt_0',  'pano_sum', 'pano_rh', 'refuge','cmpx_shanon', 'cmpx_gini','dist_gini'],
 }
 
 // update map and remove previous layer on map
@@ -251,7 +314,7 @@ var mapVectorTileOptions = {
 var buttonNames = Object.keys(attr_names);
 var buttonList = document.createElement("ul");
 var select_attr = 'slope_median';
-var select_metrics = 'All-Measure';
+var select_metrics = 'Urban-Natural-Form';
 // Add the vector tiles to the map using default data
 var vectorTileLayer = new L.VectorGrid.Protobuf(mapUrl[selectedData], mapVectorTileOptions).addTo(map);
 CartoDB_VoyagerOnlyLabels.addTo(map)
@@ -264,28 +327,36 @@ for (var i = 0; i < buttonNames.length; i++) {
     button.classList.add('btn', 'btn-outline-primary')
     button.onclick = function() {
         select_metrics = this.innerHTML;
-        console.log("Selected metric: " + select_metrics);
+        // console.log("Selected metric: " + select_metrics);
         var existingLists = document.getElementsByTagName("ul");
-            console.log(existingLists)
+            // console.log(existingLists)
             while (existingLists.length > 3) {
                 existingLists[3].parentNode.removeChild(existingLists[3]);
             }
         // Create new button list
         var newButtonNames = attr_names[select_metrics];
         var newButtonList = document.createElement("ul");
+        // var newicon = icon_dict[select_attr]
 
         for (var i = 0; i < newButtonNames.length; i++) {
             var newListItem = document.createElement("li");
             var newButton = document.createElement("button");
+            var icon = document.createElement("img");
+            icon.src = icon_dict[newButtonNames[i]];
+            // console.log(icon.src)
+            // console.log(newButtonNames[i])
+            icon.style.height = '50px';
+            icon.alt = "Icon " + (i+1);
             newButton.innerHTML = newButtonNames[i];
-            newButton.classList.add('btn', 'btn-outline-secondary')
+            newButton.classList.add('btn', 'unstyled-button')
             newButton.onclick = function() {
-                select_attr = this.innerHTML;
+                select_attr = this.textContent;
+                // console.log(this.textContent)
                 console.log("Selected attribute: " + select_attr);
                 updateMap(mapUrl[selectedData],mapVectorTileOptions);
                 CartoDB_VoyagerOnlyLabels.addTo(map)
             }
-            
+            newButton.appendChild(icon);
             newListItem.appendChild(newButton);
             newButtonList.appendChild(newListItem);
         }
@@ -301,20 +372,28 @@ metrcPanel.appendChild(buttonList);
 
 // Create new button list
 var newButtonNames = attr_names[select_metrics];
+var newicon = icon_dict[select_attr]
 var newButtonList = document.createElement("ul");
 
 for (var i = 0; i < newButtonNames.length; i++) {
     var newListItem = document.createElement("li");
     var newButton = document.createElement("button");
+    var icon = document.createElement("img");
+    icon.src = icon_dict[newButtonNames[i]];
+    // console.log(icon.src)
+    // console.log(newButtonNames[i])
+    icon.style.height = '50px';
+    icon.alt = "Icon " + (i+1);
     newButton.innerHTML = newButtonNames[i];
-    newButton.classList.add('btn', 'btn-outline-secondary')
+    newButton.classList.add('btn', 'unstyled-button')
     newButton.onclick = function() {
-        select_attr = this.innerHTML;
+        // console.log(this)
+        select_attr = this.textContent;
         console.log("Selected attribute: " + select_attr);
         updateMap(mapUrl[selectedData],mapVectorTileOptions);
         CartoDB_VoyagerOnlyLabels.addTo(map)
     }
-    
+    newButton.appendChild(icon);
     newListItem.appendChild(newButton);
     newButtonList.appendChild(newListItem);
 }

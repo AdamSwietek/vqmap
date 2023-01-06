@@ -2,7 +2,10 @@ ul {
     display: flex;
     justify-content: center;
     overflow-x: auto;
+    /* width: 100vh; */
   }
+
+  
 li {
     list-style-type: none;
 }
@@ -39,3 +42,6 @@ button {
         height: 50vh,
     }
 }
+.sidebar {
+    will-change: transform;
+  }
