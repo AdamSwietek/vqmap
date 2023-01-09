@@ -208,7 +208,7 @@ var attr_names = {
     'All-Measure' : Object.keys(attr_breaks),
     'Scarce-Elements' : ['Abb7_1','Abw14_1', 'Flu18_1', 'Gew1_1',  'Keh15_1', 'Lan10_1','Lan17_1', 'Sak13_1', 'Ueb5_1', 'Ver11_1', 'Was16_1'], //'Hel19_1',
     'Abundant-Elements': ['Dac1','Fas2', 'Geb12', 'Kue8', 'Nat3', 'Veg3', 'Ver6', 'sky'], 
-    'Urban-Natural-Form': ['prob', 'z_resid', 'net_income_ptp', 'slope_median', 'rich', 'med','bldg_count','gini'], 
+    'Urban-Natural-Form': ['bldg_count', 'slope_median', 'net_income_ptp', 'med','prob', 'z_resid', 'rich','gini'], 
     'View-Configuration':['cmpx_rh', 'snt_Neg', 'snt_Pos', 'rh_snt_0',  'pano_sum', 'pano_rh', 'refuge','cmpx_shanon', 'cmpx_gini','dist_gini'],
 }
 
