@@ -143,7 +143,6 @@ icon_dict = {'bldg_count': 'images/icons/icon-01.png',
 'Was16_10': 'images/icons/icon-57.png'
 }
 
-
 const color_dict = {
     "YlGnBu":{"0":"#f2fabc","1":"#dcf1b2","2":"#bbe4b5","3":"#85cfba","4":"#57bec1","5":"#34a9c3","6":"#1d8dbe","7":"#2166ac","8":"#24479d","9":"#1d2e83"},
     "Spectral":{"0":"#d0384e","1":"#ee6445","2":"#fa9b58","3":"#fece7c","4":"#fff1a8","5":"#f4faad","6":"#d1ed9c","7":"#97d5a4","8":"#5cb7aa","9":"#3682ba"},
@@ -160,7 +159,6 @@ const color_dict = {
     "YlGnBu_r":{"0":"#1d2e83","1":"#24479d","2":"#2166ac","3":"#1d8dbe","4":"#34a9c3","5":"#57bec1","6":"#85cfba","7":"#bbe4b5","8":"#dcf1b2","9":"#f2fabc"},
     "PuBuGn":{"0":"#f1e8f3","1":"#e0daec","2":"#c9cee4","3":"#a9bfdc","4":"#7eb0d3","5":"#55a0ca","6":"#328fbc","7":"#0b8393","8":"#01756f","9":"#01614f"}
 }
-
 // console.log(color_dict['YlGnBu'])
 function getColor(d, attr) {
     // var break_val = attr_breaks[attr];
@@ -180,29 +178,6 @@ function getColor(d, attr) {
             color_dict[attr_pal[attr]][0];
     };
 
-var button0Names = ["communes", "hexbins"];
-var selectedData = 'hexbins';
-var button0List = document.createElement("ul");
-for (var i = 0; i < button0Names.length; i++) {
-    var navBarpanel = document.getElementById("group_panel");
-    var list0Item = document.createElement("li");
-    var button0 = document.createElement("button");
-    button0.innerHTML = button0Names[i];
-    button0.classList.add('btn', 'btn-outline-secondary')
-    button0.onclick = function() {
-        selectedData = this.innerHTML;
-        // console.log("Selected Data: " + selectedData);
-        console.log(selectedData);
-        updateMap(mapUrl[selectedData],mapVectorTileOptions);
-        CartoDB_VoyagerOnlyLabels.addTo(map)
-        console.log('here')
-        // console.log("no of layers: "+vectorTileLayer.getLayers().length+10);
-    }
-    list0Item.appendChild(button0);
-    button0List.appendChild(list0Item);
-}
-navBarpanel.appendChild(button0List);
-// sidepanel.appendChild(buttonList);
 var attr_names = {
     'All-Measure' : Object.keys(attr_breaks),
     'Scarce-Elements' : ['Abb7_1','Abw14_1', 'Flu18_1', 'Gew1_1',  'Keh15_1', 'Lan10_1','Lan17_1', 'Sak13_1', 'Ueb5_1', 'Ver11_1', 'Was16_1'], //'Hel19_1',
@@ -232,20 +207,15 @@ function updateMap(url,style){
     return vectorTileLayer.addTo(map);
 };
     
- // Initialize map and set view to Lausanne, Switzerland
  var map = L.map('map', {
-    center: [46.8480, 7.9474],//[46.4414,6.5295],// [46.9480, 7.4474]
-    minZoom: 9,
-    maxZoom: 16,
-    zoomControl: true,
-    zoom: 6,
+        center: [46.8480, 7.9474],//[46.4414,6.5295],// [46.9480, 7.4474]
+        minZoom: 8,
+        maxZoom: 16,
+        zoomControl: true,
+        zoom: 8,
+        maxNativeZoom: 10,
+        minNativeZoom: 10,
 });
-//  // add background basemap
-// var mapBaseLayer = L.tileLayer(
-//     'https://{s}.basemaps.cartocdn.com/rastertiles/light_all/{z}/{x}/{y}.png', {
-//         attribution: '(C) OpenStreetMap contributors (C) CARTO'
-//     }
-// ).addTo(map);
 
 var CartoDB_VoyagerNoLabels = L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager_nolabels/{z}/{x}/{y}{r}.png', {
 	attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
@@ -258,9 +228,7 @@ var CartoDB_VoyagerOnlyLabels = L.tileLayer('https://{s}.basemaps.cartocdn.com/r
 	subdomains: 'abcd',
 	maxZoom: 20
 });
-
-
-  
+ 
 // get vector tiles URL
 var mapUrl = {
     "hexbins": "tiles_hexbin_151222/{z}/{x}/{y}.pbf",
@@ -275,6 +243,7 @@ var vectorTileStyling = {
     var fillColor = getColor(properties[select_attr], select_attr)
     var opacity = .9;
     var weight = 0;
+    
     if (zoom > 12) {
         weight = 1.0;
         opacity = .5;
@@ -312,139 +281,90 @@ var mapVectorTileOptions = {
     interactive: true,
     attribution: '(C) A.R. Swietek',
     maxNativeZoom: 15,
-    minZoom: 9,
+    minNativeZoom: 9,
+    minZoom: 6,
     vectorTileLayerStyles:vectorTileStyling,
   };
-
-var buttonNames = Object.keys(attr_names);
-var buttonList = document.createElement("ul");
-var select_attr = 'slope_median';
-var select_metrics = 'All-Measure';
-// Add the vector tiles to the map using default data
+var selectedData = 'communes'
+var select_metrics = 'Abundant-Elements'
+var select_attr  = 'slope_median'
+createList()
 var vectorTileLayer = new L.VectorGrid.Protobuf(mapUrl[selectedData], mapVectorTileOptions).addTo(map);
 CartoDB_VoyagerOnlyLabels.addTo(map)
-// Create Series of Buttons starting from Groups -> Metric Type -> Metric
-for (var i = 0; i < buttonNames.length; i++) {
-    var metrcPanel = document.getElementById("metrics_panel");
-    var listItem = document.createElement("li");
-    var button = document.createElement("button");
-    button.innerHTML = buttonNames[i];
-    button.classList.add('btn', 'btn-outline-primary')
-    button.onclick = function() {
-        select_metrics = this.innerHTML;
-        // console.log("Selected metric: " + select_metrics);
-        var existingLists = document.getElementsByTagName("ul");
-            // console.log(existingLists)
-            while (existingLists.length > 2) {
-                existingLists[2].parentNode.removeChild(existingLists[2]);
-            }
-        // Create new button list
-        var newButtonNames = attr_names[select_metrics];
-        var newButtonList = document.createElement("ul");
-        // var newicon = icon_dict[select_attr]
 
-        for (var i = 0; i < newButtonNames.length; i++) {
-            var newListItem = document.createElement("li");
-            var newButton = document.createElement("button");
-            var icon = document.createElement("img");
-            icon.src = icon_dict[newButtonNames[i]];
-            // console.log(icon.src)
-            // console.log(newButtonNames[i])
-            icon.style.height = '50px';
-            icon.alt = "Icon " + (i+1);
-            newButton.innerHTML = newButtonNames[i];
-            newButton.classList.add('btn', 'unstyled-button')
-            newButton.onclick = function() {
-                select_attr = this.textContent;
-                // console.log(this.textContent)
-                console.log("Selected attribute: " + select_attr);
-                updateMap(mapUrl[selectedData],mapVectorTileOptions);
-                CartoDB_VoyagerOnlyLabels.addTo(map)
-            }
-            newButton.appendChild(icon);
-            newListItem.appendChild(newButton);
-            newButtonList.appendChild(newListItem);
-        }
-        // Add new button list to the page
-        metrcPanel.appendChild(newButtonList);
-    }
 
-    button.innerHTML = buttonNames[i];
-    listItem.appendChild(button);
-    buttonList.appendChild(listItem);
+function mapCommune(){
+    selectedData = 'communes'
+    updateMap(mapUrl[selectedData],mapVectorTileOptions);
+    CartoDB_VoyagerOnlyLabels.addTo(map)
+    console.log('here')
 }
-metrcPanel.appendChild(buttonList);
+
+function mapHexbin(){
+    selectedData = 'hexbins'
+    console.log(selectedData)
+    updateMap(mapUrl[selectedData],mapVectorTileOptions);
+    CartoDB_VoyagerOnlyLabels.addTo(map)
+}
+
+function createList(){
+    var newButtonNames = attr_names[select_metrics];
+    var newicon = icon_dict[select_attr]
+    var newButtonList = document.createElement("ul");
+    var metrcPanel = document.getElementById("metrics_panel");
+    for (var i = 0; i < newButtonNames.length; i++) {
+        var newListItem = document.createElement("li");
+        var newButton = document.createElement("button");
+        var icon = document.createElement("img");
+        icon.src = icon_dict[newButtonNames[i]];
+        // console.log(icon.src)
+        // console.log(newButtonNames[i])
+        icon.style.height = '50px';
+        icon.alt = "Icon " + (i+1);
+        newButton.innerHTML = newButtonNames[i];
+        newButton.classList.add('btn', 'unstyled-button')
+        newButton.onclick = function() {
+            // console.log(this)
+            select_attr = this.textContent;
+            console.log("Selected attribute: " + select_attr);
+            updateMap(mapUrl[selectedData],mapVectorTileOptions);
+            CartoDB_VoyagerOnlyLabels.addTo(map)
+        }
+        newButton.appendChild(icon);
+        newListItem.appendChild(newButton);
+        newButtonList.appendChild(newListItem);
+    }
+    // Add new button list to the page
+    metrcPanel.appendChild(newButtonList);
+}
+
+function listScarce(){
+    select_metrics = 'Scarce-Elements';
+    document.getElementById("metrics_panel").innerHTML = ""
+
+    createList()
+}
+function listAbund(){
+    select_metrics = 'Abundant-Elements';
+    document.getElementById("metrics_panel").innerHTML = ""
+    createList()
+}
+function listUNF(){
+    select_metrics = 'Urban-Natural-Form';
+    document.getElementById("metrics_panel").innerHTML = ""
+    createList()
+}
+function listVConfig(){
+    select_metrics = 'View-Configuration';
+    document.getElementById("metrics_panel").innerHTML = ""
+    createList()
+}
+function listAll(){
+    select_metrics = 'All-Measure';
+    document.getElementById("metrics_panel").innerHTML = ""
+    createList()
+}
+
 
 // Create new button list
-var newButtonNames = attr_names[select_metrics];
-var newicon = icon_dict[select_attr]
-var newButtonList = document.createElement("ul");
-
-for (var i = 0; i < newButtonNames.length; i++) {
-    var newListItem = document.createElement("li");
-    var newButton = document.createElement("button");
-    var icon = document.createElement("img");
-    icon.src = icon_dict[newButtonNames[i]];
-    // console.log(icon.src)
-    // console.log(newButtonNames[i])
-    icon.style.height = '50px';
-    icon.alt = "Icon " + (i+1);
-    newButton.innerHTML = newButtonNames[i];
-    newButton.classList.add('btn', 'unstyled-button')
-    newButton.onclick = function() {
-        // console.log(this)
-        select_attr = this.textContent;
-        console.log("Selected attribute: " + select_attr);
-        updateMap(mapUrl[selectedData],mapVectorTileOptions);
-        CartoDB_VoyagerOnlyLabels.addTo(map)
-    }
-    newButton.appendChild(icon);
-    newListItem.appendChild(newButton);
-    newButtonList.appendChild(newListItem);
-}
-// Add new button list to the page
-metrcPanel.appendChild(newButtonList);
-L.control.window(map).title("testing")
-
-var dlButton = L.easyButton('<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-download" viewBox="0 0 16 16"><path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/><path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/></svg>', function(){
-    L.Control.Window(map)
-        .title('Heading!')
-        .content('First paragraph.')
-        .show()
-  }).addTo(map);
-  
-// var info = L.control();
-
-// info.onAdd = function (map) {
-//     this._div = L.DomUtil.create('div', 'info'); // create a div with a class "info"
-//     this.update();
-//     return this._div;
-// };
-
-// // method that we will use to update the control based on feature properties passed
-// info.update = function (props) {
-//     // console.log('working');
-//     this._div.innerHTML = '<h4>Switzerland</h4>' +  (props ?
-//         '<b>' + props.prob + '</b><br />'+' people / mi<sup>2</sup>'
-//         : 'Hover over');
-// };
-
-// info.addTo(map);
-
-// function highlightFeature(e) {
-//     var layer = e.target;
-
-//     layer.setStyle({
-//         weight: 5,
-//         color: '#666',
-//         dashArray: '',
-//         fillOpacity: 0.7
-//     });
-
-//     // layer.bringToFront();
-//     info.update(layer.feature.properties);
-// }
-
-
-
 

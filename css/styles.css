@@ -1,6 +1,6 @@
 ul {
     display: flex;
-    justify-content: center;
+    justify-content: left;
     overflow-x: auto;
     /* width: 100vh; */
   }
@@ -9,24 +9,11 @@ ul {
 li {
     list-style-type: none;
 }
-
+.star{
+    font-size: 1.5em;
+  } 
 button {
     margin-bottom: 8px;
-} */
-
-
-/* Control both side */
-/* .leftside, .rightside {
-    height: 100vh,
-} */
-/* Control the left side */
-/* .leftside {
-    background: whitesmoke;
-} */
-
-/* Control the right side
-.rightside {
-    background: whitesmoke;
 } */
 
 .navbar a{
@@ -36,12 +23,13 @@ button {
 
 
 
-@media screen and (min-width:800px)
-{
-    .leftside, .rightside {
-        height: 50vh,
+@media screen and (max-width : 600px) {
+    .desk {
+            visibility:hidden;
+            height : 0
     }
-}
-.sidebar {
-    will-change: transform;
-  }
+    .navbar-icon{
+        height : 20;
+    }
+    }
+
