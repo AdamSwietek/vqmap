@@ -9,27 +9,7 @@ ul {
 li {
     list-style-type: none;
 }
-.star{
-    font-size: 1.5em;
-  } 
+
 button {
     margin-bottom: 8px;
-} */
-
-.navbar a{
-    font-family: Verdana !important;
-    height: 200px;
 }
-
-
-
-@media screen and (max-width : 600px) {
-    .desk {
-            visibility:hidden;
-            height : 0;
-    }
-    .navbar-icon{
-        height : 20;
-    }
-    }
-
