@@ -39,12 +39,12 @@
         <nav class="navbar bg-body-tertiary">
 
           <ul class="navbar-nav">
-            <select class="form-select form-select-sm" aria-label=".form-select-sm example">
+            <select id = 'select-dtype' class="form-select form-select-sm" aria-label=".form-select-sm example">
               <option selected>Select Data</option>
               <option value="communes" onclick="mapCommune();">Commune</option>
               <option value="hexbins" onclick="mapHexbin();">Hexbin</option>
             </select>
-            <select class="form-select form-select-sm" aria-label=".form-select-sm example">
+            <select id = 'select-metric' class="form-select form-select-sm" aria-label=".form-select-sm example">
               <option selected>Filter Metrics</option>
               <option value="Scarce-Elements" onclick="listScarce();">Scarce Elements</option>
               <option value="Abundant-Elements" onclick="listAbund();">Abundant Elements</option>
@@ -69,13 +69,13 @@
                   download geodata: 
                 </span> -->
                 <button class="btn btn-outline-secondary btn-sm" type="submit"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-download" viewBox="0 0 16 16">
-                  <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
-                  <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/>
+                  <!-- <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/> -->
+                  <!-- <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/> -->
                 </svg> commune</button>
               <form method="get" action="/data/hexbin_viewdata.gpkg">
                 <button class="btn btn-outline-secondary btn-sm" type="submit"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-download" viewBox="0 0 16 16">
-                  <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
-                  <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/>
+                  <!-- <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/> -->
+                  <!-- <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/> -->
                 </svg> hexbin</button>
                 </form>
               </form>

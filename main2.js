@@ -292,20 +292,37 @@ createList()
 var vectorTileLayer = new L.VectorGrid.Protobuf(mapUrl[selectedData], mapVectorTileOptions).addTo(map);
 CartoDB_VoyagerOnlyLabels.addTo(map)
 
-
-function mapCommune(){
-    selectedData = 'communes'
+$('#select-dtype').change(function(){ 
+    selectedData = this.value;
     updateMap(mapUrl[selectedData],mapVectorTileOptions);
-    CartoDB_VoyagerOnlyLabels.addTo(map)
-    console.log('here')
-}
+    // selectedData = this.value;
+    // console.log(selectedData)
+    // if (selectedData == 'communes'){
+    //     mapCommune()}
+    // if (selectedData == 'hexbins'){
+    //     mapHexbin()}
+  });
+$('#select-metric').change(function(){ 
+    select_metrics = this.value;
+    document.getElementById("metrics_panel").innerHTML = ""
+    createList()
 
-function mapHexbin(){
-    selectedData = 'hexbins'
-    console.log(selectedData)
-    updateMap(mapUrl[selectedData],mapVectorTileOptions);
-    CartoDB_VoyagerOnlyLabels.addTo(map)
-}
+  });
+
+// function mapCommune(){
+//     selectedData = 'communes'
+//     console.log('here')
+//     updateMap(mapUrl[selectedData],mapVectorTileOptions);
+//     CartoDB_VoyagerOnlyLabels.addTo(map)
+//     console.log('here')
+// }
+
+// function mapHexbin(){
+//     selectedData = 'hexbins'
+//     console.log(selectedData)
+//     updateMap(mapUrl[selectedData],mapVectorTileOptions);
+//     CartoDB_VoyagerOnlyLabels.addTo(map)
+// }
 
 function createList(){
     var newButtonNames = attr_names[select_metrics];
@@ -318,7 +335,7 @@ function createList(){
         var icon = document.createElement("img");
         icon.src = icon_dict[newButtonNames[i]];
         // console.log(icon.src)
-        // console.log(newButtonNames[i])
+        console.log(newButtonNames[i])
         icon.style.height = '50px';
         icon.alt = "Icon " + (i+1);
         newButton.innerHTML = newButtonNames[i];
@@ -338,32 +355,34 @@ function createList(){
     metrcPanel.appendChild(newButtonList);
 }
 
-function listScarce(){
-    select_metrics = 'Scarce-Elements';
-    document.getElementById("metrics_panel").innerHTML = ""
+// function listScarce(){
+//     select_metrics = 'Scarce-Elements';
+//     document.getElementById("metrics_panel").innerHTML = ""
 
-    createList()
-}
-function listAbund(){
-    select_metrics = 'Abundant-Elements';
-    document.getElementById("metrics_panel").innerHTML = ""
-    createList()
-}
-function listUNF(){
-    select_metrics = 'Urban-Natural-Form';
-    document.getElementById("metrics_panel").innerHTML = ""
-    createList()
-}
-function listVConfig(){
-    select_metrics = 'View-Configuration';
-    document.getElementById("metrics_panel").innerHTML = ""
-    createList()
-}
-function listAll(){
-    select_metrics = 'All-Measure';
-    document.getElementById("metrics_panel").innerHTML = ""
-    createList()
-}
+//     createList()
+// }
+// function listAbund(){
+//     select_metrics = 'Abundant-Elements';
+//     document.getElementById("metrics_panel").innerHTML = ""
+//     createList()
+// }
+// function listUNF(){
+//     select_metrics = 'Urban-Natural-Form';
+//     document.getElementById("metrics_panel").innerHTML = ""
+//     createList()
+// }
+// function listVConfig(){
+//     select_metrics = 'View-Configuration';
+//     document.getElementById("metrics_panel").innerHTML = ""
+//     createList()
+// }
+// function listAll(){
+//     select_metrics = 'All-Measure';
+//     document.getElementById("metrics_panel").innerHTML = ""
+//     createList()
+// }
+
+
 
 
 // Create new button list
