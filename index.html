@@ -65,15 +65,27 @@
     <hr>
 
     </div> 
-    <div class="container text-left">
+    <!-- <div class="container text-left">
       <div class="row align-items-left">
-        <div class="col">
-          <!-- <a>Select Metric</a> -->
+        <div class="column">
           <div id="metrics_panel"></div>
         </div>
+        <div class="column">
+          <div id="myDiv"></div>
+        </div>
       </div>
-    </div>
-       
+    </div> -->
+    <div class="container">
+      <div class="row">
+        <div class="col">
+          <div id="metrics_panel"></div>
+        </div>
+
+        <div class="col-md-auto">
+          <div id="myDiv"></div>
+        </div>
+      </div>
+    </div>  
     <div class = 'row no-gutters'>
      <!-- Map container -->
         <div id="map" style="height: 80vh;">
@@ -113,13 +125,14 @@
     <script src="https://unpkg.com/leaflet.vectorgrid@1.3.0/dist/Leaflet.VectorGrid.bundled.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/chroma-js/2.4.2/chroma.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/leaflet-easybutton@2/src/easy-button.js"></script>
-    
+    <script src='https://cdn.plot.ly/plotly-2.18.0.min.js'></script>
 
     <!-- pluggins -->
     <!-- <script src="main.js"></script> -->
     <script src="main2.js"></script>
     <script src="js/leaflet-sidebar.js"></script>
     <script src="js/L.Control.Window.js"></script>
+    <!-- <script src='https://cdn.plot.ly/plotly-2.18.0.min.js'></script> -->
   
    
 </body>

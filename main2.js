@@ -26,33 +26,33 @@ rename_col = {
     'Dac1':'Roof (%)', 
     'Fas2':'Fassade (%)',  
     'Geb12':'Building (%)',  
-    'Kue8':'ArtificialGrass (%)',  
+    'Kue8':'Artificial Grass (%)',  
     'Nat3':'Nature (%)',  
     'Veg3':'Roof (%)', 
-    'Ver6':'RoadTraffic (%)', 
+    'Ver6':'Road (%)', 
     'sky':'Sky (%)', 
     'Abb7_1':'Industrial (1%)', 
-    'Abw14_1':'WasteWaster (1%)', 
+    'Abw14_1':'Waste Waster (1%)', 
     'Flu18_1':'Airfield (1%)', 
     'Gew1_1':'WaterBody (1%)',  
     'Hel19_1':'Heliport (1%)', 
-    'Keh15_1':'WasteInceneration (1%)',  
-    'Lan10_1':'Agriculutre v', 
+    'Keh15_1':'Waste (1%)',  
+    'Lan10_1':'Agriculutre (1%))', 
     'Lan17_1':'Airport (1%)', 
     'Sak13_1':'Sacral (1%)',  
     'Sie9_1':'Settlement (1%)', 
     'Ueb5_1':'Other (1%)', 
-    'Ver11_1':'HighPerformingTraffic (1%)',  
-    'Was16_1':'WaterBasin (1%)',  
+    'Ver11_1':'High Traffic (1%)',  
+    'Was16_1':'Water Basin (1%)',  
     'Abb7_10':'Industrial (1%)',  
-    'Abw14_10':'WasteWaster (1%)', 
+    'Abw14_10':'Waste Waster (1%)', 
     'Flu18_10':'Airfield (10%)', 
     'Gew1_10':'WaterBody (10%)', 
     'Hel19_10':'Heliport (10%)', 
-    'Keh15_10':'WasteInceneration (10%)',  
+    'Keh15_10':'Waste (10%)',  
     'Lan10_10':'Agriculture (10%)',
     'Lan17_10':'Airport (10%)', 
-    'Sak13_10':'Sacralv', 
+    'Sak13_10':'Sacral (10%)', 
     'Sie9_10':'Settlement (10%)',
     'Ueb5_10':'Other (10%)',  
     'Ver11_10':'HighPerformingTraffic (10%)',   
@@ -264,10 +264,29 @@ function updateMap(url,style){
         map.removeLayer(layersToRemove[i])
         console.log(layersToRemove[i])
     }
+    vectorTileLayer.on('click mouseover', function (e) { 
+        // console.log(e.layer.properties)// this line and below 
+        L.popup()
+        .setContent(content_update(e.layer.properties))
+        .setLatLng(e.latlng)
+        .openOn(map);
+
+        })
 
     return vectorTileLayer.addTo(map);
+       
 };
+
+content_update = function(props){
+    // var metric_var = new $('input[name="metric_radio"]:checked').val();
     
+    return (props ? 
+        props['GMDNAME'] + '<br></br>'+
+        '<b>' + rename_col[select_attr]+': </b>  '+ 
+        Math.round(props[select_attr],2 )
+        : 'Hover over a state')
+}
+
  var map = L.map('map', {
         center: [46.8480, 7.9474],//[46.4414,6.5295],// [46.9480, 7.4474]
         minZoom: 8,
@@ -298,24 +317,24 @@ var mapUrl = {
 
 var vectorTileStyling = {
   // call original geojson file name
-  suisse_commune_4326: function(properties, zoom) {
-  
-    // get corresponding color 
-    var fillColor = getColor(properties[select_attr], select_attr)
-    var opacity = .9;
-    var weight = 0;
+    suisse_commune_4326: function(properties, zoom) {
     
-    if (zoom > 12) {
-        weight = 1.0;
-        opacity = .5;
-  }
-  return ({
-      fill: true,
-      fillColor: fillColor,
-      fillOpacity: opacity,
-      weight: weight,
-      color: "#ffffff",
-  });
+        // get corresponding color 
+        var fillColor = getColor(properties[select_attr], select_attr)
+        var opacity = .9;
+        var weight = 0;
+        
+        if (zoom > 12) {
+            weight = 1.0;
+            opacity = .5;
+    }
+    return ({
+        fill: true,
+        fillColor: fillColor,
+        fillOpacity: opacity,
+        weight: weight,
+        color: "#ffffff",
+    });
     },
     suisse_hexbin_4326: function(properties, zoom) {
 
@@ -350,7 +369,14 @@ var selectedData = 'communes'
 var select_metrics = 'Abundant-Elements'
 var select_attr  = 'slope_median'
 createList()
-var vectorTileLayer = new L.VectorGrid.Protobuf(mapUrl[selectedData], mapVectorTileOptions).addTo(map);
+var vectorTileLayer = new L.VectorGrid.Protobuf(mapUrl[selectedData], mapVectorTileOptions).on('click mouseover', function (e) { 
+    console.log(e.layer.properties)// this line and below 
+    L.popup()
+    .setContent(content_update(e.layer.properties))
+    .setLatLng(e.latlng)
+    .openOn(map);
+
+    }).addTo(map);
 CartoDB_VoyagerOnlyLabels.addTo(map)
 
 // update map and icons based on changed inputs
@@ -365,11 +391,6 @@ $('#select-metric').change(function(){
     
   });
 
-
-vectorTileLayer.on('mouseover',function(ev) {
-    console.log(ev.target.id)
-  });
-
 function createList(){
     var newButtonNames = attr_names[select_metrics];
     var newicon = icon_dict[select_attr]
@@ -381,12 +402,12 @@ function createList(){
         var icon = document.createElement("img");
         icon.src = icon_dict[newButtonNames[i]];
         // console.log(icon.src)
-        console.log(newButtonNames[i])
-        icon.style.height = '40px';
+        // console.log(newButtonNames[i])
+        icon.style.height = '60px';
         icon.alt = "Icon " + (i+1);
         newButton.innerHTML = rename_col[newButtonNames[i]];
         newButton.value = newButtonNames[i];
-        newButton.style.fontSize = '15px'
+        newButton.style.fontSize = '10px'
         newButton.style.fontFamily = 'tahoma'
         newButton.classList.add('btn', 'unstyled-button')
         newButton.onclick = function() {
@@ -405,6 +426,49 @@ function createList(){
     metrcPanel.appendChild(newButtonList);
 }
 
+
+
+  var trace3 = {  
+    y: [0, 0, 0, 0], 
+    x: [0, .25, .29, .5], 
+    mode: 'markers',
+    type: 'scatter',
+    marker: {
+        color: [0, 1, 2, 3, 4], 
+        size: 10,
+ 
+    },
+    lines: {
+        color: 'white', 
+        size: 10,
+ 
+    },
+    
+  };
+  var data22 = [trace3];
+  var layout = {
+    // autosize: false,
+    width: 100,
+    paper_bgcolor:'rgba(0,0,0,0)',
+    plot_bgcolor:'rgba(0,0,0,0)',
+    height: 50, 
+    margin: { 
+      l: 0, 
+      r: 0, 
+      b: 0,
+      t: 0,
+      pad: 1
+    },
+    xaxis: {
+        autorange: true,
+        bounds: [0, 1],
+        type: 'linear'
+      }
+  };
+//   console.log(document.getElementById('map'))
+  Plotly.newPlot('myDiv', data22, layout);
+      
+ 
 // function listScarce(){
 //     select_metrics = 'Scarce-Elements';
 //     document.getElementById("metrics_panel").innerHTML = ""
