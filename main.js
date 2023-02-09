@@ -188,9 +188,10 @@ for (var i = 0; i < button0Names.length; i++) {
     var list0Item = document.createElement("li");
     var button0 = document.createElement("button");
     button0.innerHTML = button0Names[i];
+    button0.value = button0Names[i];
     button0.classList.add('btn', 'btn-outline-secondary')
     button0.onclick = function() {
-        selectedData = this.innerHTML;
+        selectedData = this.value;
         // console.log("Selected Data: " + selectedData);
         console.log(selectedData);
         updateMap(mapUrl[selectedData],mapVectorTileOptions);

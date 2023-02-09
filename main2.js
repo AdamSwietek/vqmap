@@ -1,3 +1,64 @@
+rename_col = {
+
+    'bldg_count':'No. Buildings', 
+    'rich':'No. High VC', 
+    'prob':'% High VC', 
+    'cv':'Variation VC',
+    'gini':'Ineq. VC',
+    'med':'Median VC', 
+    'avg':'Avg VC', 
+    'l_prob':'Local Avg VC', 
+    'net_income_ptp':'CLI', 
+    'z_resid': 'VC/CLI ',
+    'slope_median' :'Median Slope', 
+    'slope_mean': 'Mean Slope', 
+    'cmpx_rh': 'No. Elements', 
+    'cmpx_shanon':'Bal. Element', 
+    'cmpx_gini':'Ineq. Element',
+    'snt_0':'Neutral (%)', 
+    'snt_Neg':'Negative (%)', 
+    'snt_Pos':'Positive (%)', 
+    'rh_snt_0':'No. Neutral', 
+    'dist_gini':'Ineq. Distance', 
+    'pano_sum':'Panorama (%)',
+    'pano_rh':'No. Panoramic', 
+    'refuge':'Refuge', 
+    'Dac1':'Roof (%)', 
+    'Fas2':'Fassade (%)',  
+    'Geb12':'Building (%)',  
+    'Kue8':'ArtificialGrass (%)',  
+    'Nat3':'Nature (%)',  
+    'Veg3':'Roof (%)', 
+    'Ver6':'RoadTraffic (%)', 
+    'sky':'Sky (%)', 
+    'Abb7_1':'Industrial (1%)', 
+    'Abw14_1':'WasteWaster (1%)', 
+    'Flu18_1':'Airfield (1%)', 
+    'Gew1_1':'WaterBody (1%)',  
+    'Hel19_1':'Heliport (1%)', 
+    'Keh15_1':'WasteInceneration (1%)',  
+    'Lan10_1':'Agriculutre v', 
+    'Lan17_1':'Airport (1%)', 
+    'Sak13_1':'Sacral (1%)',  
+    'Sie9_1':'Settlement (1%)', 
+    'Ueb5_1':'Other (1%)', 
+    'Ver11_1':'HighPerformingTraffic (1%)',  
+    'Was16_1':'WaterBasin (1%)',  
+    'Abb7_10':'Industrial (1%)',  
+    'Abw14_10':'WasteWaster (1%)', 
+    'Flu18_10':'Airfield (10%)', 
+    'Gew1_10':'WaterBody (10%)', 
+    'Hel19_10':'Heliport (10%)', 
+    'Keh15_10':'WasteInceneration (10%)',  
+    'Lan10_10':'Agriculture (10%)',
+    'Lan17_10':'Airport (10%)', 
+    'Sak13_10':'Sacralv', 
+    'Sie9_10':'Settlement (10%)',
+    'Ueb5_10':'Other (10%)',  
+    'Ver11_10':'HighPerformingTraffic (10%)',   
+    'Was16_10':'WaterBasin (10%)'
+
+}
 const attr_breaks ={
     "bldg_count":{"0":36.0,"1":96.0,"2":177.0,"3":279.0,"4":408.0,"5":562.0,"6":750.0,"7":995.0,"8":1337.0,"9":2233.0},
     "rich":{"0":12.0,"1":37.0,"2":77.0,"3":135.0,"4":207.0,"5":297.0,"6":416.0,"7":582.0,"8":852.0,"9":1351.0},
@@ -301,9 +362,13 @@ $('#select-metric').change(function(){
     select_metrics = this.value;
     document.getElementById("metrics_panel").innerHTML = ""
     createList()
+    
   });
 
 
+vectorTileLayer.on('mouseover',function(ev) {
+    console.log(ev.target.id)
+  });
 
 function createList(){
     var newButtonNames = attr_names[select_metrics];
@@ -317,13 +382,17 @@ function createList(){
         icon.src = icon_dict[newButtonNames[i]];
         // console.log(icon.src)
         console.log(newButtonNames[i])
-        icon.style.height = '50px';
+        icon.style.height = '40px';
         icon.alt = "Icon " + (i+1);
-        newButton.innerHTML = newButtonNames[i];
+        newButton.innerHTML = rename_col[newButtonNames[i]];
+        newButton.value = newButtonNames[i];
+        newButton.style.fontSize = '15px'
+        newButton.style.fontFamily = 'tahoma'
         newButton.classList.add('btn', 'unstyled-button')
         newButton.onclick = function() {
             // console.log(this)
-            select_attr = this.textContent;
+            select_attr = this.value;
+            
             console.log("Selected attribute: " + select_attr);
             updateMap(mapUrl[selectedData],mapVectorTileOptions);
             CartoDB_VoyagerOnlyLabels.addTo(map)
