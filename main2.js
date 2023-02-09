@@ -292,37 +292,18 @@ createList()
 var vectorTileLayer = new L.VectorGrid.Protobuf(mapUrl[selectedData], mapVectorTileOptions).addTo(map);
 CartoDB_VoyagerOnlyLabels.addTo(map)
 
+// update map and icons based on changed inputs
 $('#select-dtype').change(function(){ 
     selectedData = this.value;
     updateMap(mapUrl[selectedData],mapVectorTileOptions);
-    // selectedData = this.value;
-    // console.log(selectedData)
-    // if (selectedData == 'communes'){
-    //     mapCommune()}
-    // if (selectedData == 'hexbins'){
-    //     mapHexbin()}
   });
 $('#select-metric').change(function(){ 
     select_metrics = this.value;
     document.getElementById("metrics_panel").innerHTML = ""
     createList()
-
   });
 
-// function mapCommune(){
-//     selectedData = 'communes'
-//     console.log('here')
-//     updateMap(mapUrl[selectedData],mapVectorTileOptions);
-//     CartoDB_VoyagerOnlyLabels.addTo(map)
-//     console.log('here')
-// }
 
-// function mapHexbin(){
-//     selectedData = 'hexbins'
-//     console.log(selectedData)
-//     updateMap(mapUrl[selectedData],mapVectorTileOptions);
-//     CartoDB_VoyagerOnlyLabels.addTo(map)
-// }
 
 function createList(){
     var newButtonNames = attr_names[select_metrics];
@@ -381,7 +362,20 @@ function createList(){
 //     document.getElementById("metrics_panel").innerHTML = ""
 //     createList()
 // }
+// function mapCommune(){
+//     selectedData = 'communes'
+//     console.log('here')
+//     updateMap(mapUrl[selectedData],mapVectorTileOptions);
+//     CartoDB_VoyagerOnlyLabels.addTo(map)
+//     console.log('here')
+// }
 
+// function mapHexbin(){
+//     selectedData = 'hexbins'
+//     console.log(selectedData)
+//     updateMap(mapUrl[selectedData],mapVectorTileOptions);
+//     CartoDB_VoyagerOnlyLabels.addTo(map)
+// }
 
 
 
