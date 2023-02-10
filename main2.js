@@ -466,7 +466,7 @@ function createList(){
       }
   };
 //   console.log(document.getElementById('map'))
-  Plotly.newPlot('myDiv', data22, layout);
+//   Plotly.newPlot('myDiv', data22, layout);
       
  
 // function listScarce(){
